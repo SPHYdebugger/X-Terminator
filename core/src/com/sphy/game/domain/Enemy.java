@@ -1,4 +1,11 @@
 package com.sphy.game.domain;
 
-public class Enemy {
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+
+public class Enemy extends Character {
+
+    public Enemy(Texture texture, Vector2 position) {
+        super(texture, position);
+    }
 }
