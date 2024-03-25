@@ -26,7 +26,8 @@ public class GameScreen implements Screen {
     Array<Enemy> enemiesL;
     float lastEnemyR;
     float lastEnemyL;
-
+    Array<Bullet> bulletsR;
+    Array<Bullet> bulletsL;
     Preferences prefs;
     BitmapFont font;
     boolean pause;
@@ -36,6 +37,10 @@ public class GameScreen implements Screen {
     float randomDelayR = MathUtils.random(2f, 4f) * 1000000000;
     float randomDelayL = MathUtils.random(2f, 4f) * 1000000000;
 
+    int score =0;
+
+    float enemyYdown = 220;
+    float enemyYup = 350;
 
     @Override
     public void show() {
@@ -47,6 +52,8 @@ public class GameScreen implements Screen {
         //gunSound = Gdx.audio.newSound(Gdx.files.internal("sounds/disparo.wav"));
         enemiesR = new Array<>();
         enemiesL = new Array<>();
+        bulletsR = new Array<>();
+        bulletsL = new Array<>();
         lastEnemyR = TimeUtils.nanoTime();
         lastEnemyL = TimeUtils.nanoTime();
 
@@ -54,6 +61,7 @@ public class GameScreen implements Screen {
         pause = false;
 
         lastBulletTime = TimeUtils.nanoTime();
+
 
 
         prefs = Gdx.app.getPreferences("GamePreferences");
@@ -72,7 +80,7 @@ public class GameScreen implements Screen {
             if (TimeUtils.nanoTime() - lastEnemyR > randomDelayR)
                 spawnEnemyR();
             for (Enemy enemy : enemiesR) {
-                enemy.move(-10, 0);
+                enemy.move(-7, 0);
                 if (enemy.position.x < 0){
                     enemiesR.removeValue(enemy, true);
                 }
@@ -80,45 +88,46 @@ public class GameScreen implements Screen {
             if (TimeUtils.nanoTime() - lastEnemyL > randomDelayL)
                 spawnEnemyL();
             for (Enemy enemy : enemiesL) {
-                enemy.move(10, 0);
+                enemy.move(7, 0);
                 if (enemy.position.x > Gdx.graphics.getWidth()){
                     enemiesL.removeValue(enemy, true);
                 }
             }
-            if (playerDirection == 1){
-                bullet.move(10,0);
-            } else {
+
+
+            for (Bullet bullet : bulletsR) {
+                    bullet.move(10, 0);
+            }
+            for (Bullet bullet : bulletsL) {
                 bullet.move(-10, 0);
             }
 
 
 
-
-
-
-
         }
+
 
         // Render
         batch.begin();
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         player.draw(batch);
         bullet.draw(batch);
-        manageInput();
+
         for (Enemy enemy : enemiesR)
             enemy.draw(batch);
         for (Enemy enemy : enemiesL)
             enemy.draw(batch);
-        font.draw(batch, "Vidas: " + player.lives, 20, Gdx.graphics.getHeight() - 20);
+        for (Bullet bullet : bulletsR) {
+            bullet.draw(batch);
+        }
+        for (Bullet bullet : bulletsL) {
+            bullet.draw(batch);
+        }
+        font.draw(batch, "LIVES: " + player.lives, 20, Gdx.graphics.getHeight() - 20);
+        font.draw(batch, "SCORE: " + score, 20, Gdx.graphics.getHeight() - 50);
+        manageInput();
         handleCollisions();
         batch.end();
-
-
-
-
-
-
-
 
     }
 
@@ -154,6 +163,8 @@ public class GameScreen implements Screen {
 
     public void manageInput() {
 
+
+
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             playerDirection = 1;
             player.texture = new Texture("textures/SofiDER.png");
@@ -165,13 +176,12 @@ public class GameScreen implements Screen {
             player.texture = new Texture("textures/SofiIZQ.png");
             player.move(-10,0);
 
-        }else {
-            player.texture = new Texture("textures/sofiSoldadoTra.png");
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             if (player.position.y == 0) {
                 player.move(0,200);
+
             }
         }
         // Simular la gravedad
@@ -179,19 +189,11 @@ public class GameScreen implements Screen {
             player.move(0,-5);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
-
-            if (playerDirection == 1){
-                bullet.position.set(player.position.x + player.texture.getWidth(), player.position.y + 220);
-                bullet.rect.setPosition(bullet.position);
-            } else {
-                bullet.position.set(player.position.x, player.position.y + 220);
-                bullet.rect.setPosition(bullet.position);
+            long currentTime = TimeUtils.nanoTime();
+            if (currentTime - lastBulletTime > 300000000) { // 0.3 segundos en nanosegundos
+                spawnBullet();
+                lastBulletTime = currentTime;
             }
-
-
-
-
-
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
@@ -206,41 +208,53 @@ public class GameScreen implements Screen {
 
     public void spawnEnemyR() {
         int x = Gdx.graphics.getWidth();
-        int y = 210;
+        float y = MathUtils.randomBoolean() ? enemyYdown : enemyYup;
         Enemy enemyR = new Enemy(new Texture("textures/araña.png"), new Vector2(x, y));
         enemiesR.add(enemyR);
         lastEnemyR = TimeUtils.nanoTime();
     }
     public void spawnEnemyL() {
-        int y = 210;
+        float y = MathUtils.randomBoolean() ? enemyYdown : enemyYup;
         int xL = 0;
         Enemy enemyL = new Enemy(new Texture("textures/araña.png"), new Vector2(xL, y));
         enemiesL.add(enemyL);
         lastEnemyL = TimeUtils.nanoTime();
     }
+    private void spawnBullet() {
 
+        if (playerDirection == 1) {
+            Bullet newBullet = new Bullet(new Texture("textures/BulletR.png"), new Vector2(player.position.x + player.texture.getWidth(), player.position.y + 220));
+            bulletsR.add(newBullet);
+        } else {
+            Bullet newBullet = new Bullet(new Texture("textures/BulletL.png"), new Vector2(player.position.x, player.position.y + 220));
+            bulletsL.add(newBullet);
+        }
+    }
     private void handleCollisions() {
         for (Enemy enemy : enemiesR) {
             if (enemy.rect.overlaps(player.rect)) {
                 player.lives--;
                 if (player.lives == 0) {
                     pause = true;
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new GameOverMenuScreen());
+                    GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
+                    gameOverScreen.setScore(score);
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
                 }
                 enemiesR.removeValue(enemy, true);
                 if (prefs.getBoolean("sound"))
                     initSound.play();
             }
 
-            if (enemy.rect.overlaps(bullet.rect)) {
-
-
-                enemiesR.removeValue(enemy, true);
-                if (prefs.getBoolean("sound"))
-                    initSound.play();
-                bullet.position.set(-100, -100);
-                bullet.rect.setPosition(bullet.position);
+            for (Bullet bullet : bulletsR) {
+                if (enemy.rect.overlaps(bullet.rect)) {
+                    score += 100;
+                    enemiesR.removeValue(enemy, true);
+                    bulletsR.removeValue(bullet, true);
+                    if (prefs.getBoolean("sound"))
+                        initSound.play();
+                }
             }
+
         }
 
         for (Enemy enemy : enemiesL) {
@@ -248,21 +262,23 @@ public class GameScreen implements Screen {
                 player.lives--;
                 if (player.lives == 0) {
                     pause = true;
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new GameOverMenuScreen());
+                    GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
+                    gameOverScreen.setScore(score);
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
                 }
                 enemiesL.removeValue(enemy, true);
                 if (prefs.getBoolean("sound"))
                     initSound.play();
             }
 
-            if (enemy.rect.overlaps(bullet.rect)) {
-
-
-                enemiesL.removeValue(enemy, true);
-                if (prefs.getBoolean("sound"))
-                    initSound.play();
-                bullet.position.set(-100, -100);
-                bullet.rect.setPosition(bullet.position);
+            for (Bullet bullet : bulletsL) {
+                if (enemy.rect.overlaps(bullet.rect)) {
+                    score += 100;
+                    enemiesL.removeValue(enemy, true);
+                    bulletsL.removeValue(bullet, true);
+                    if (prefs.getBoolean("sound"))
+                        initSound.play();
+                }
             }
         }
 

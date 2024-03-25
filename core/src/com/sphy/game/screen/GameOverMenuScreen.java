@@ -22,7 +22,11 @@ public class GameOverMenuScreen implements Screen {
     Sound initSound;
     Preferences prefs;
     Texture gameOver;
+    int score;
 
+    public void setScore(int score) {
+        this.score = score;
+    }
 
 
     @Override
@@ -88,7 +92,7 @@ public class GameOverMenuScreen implements Screen {
 
         VisLabel aboutLabel = new VisLabel("YOUR SCORE");
 
-        VisLabel musicLabel = new VisLabel("1000");
+        VisLabel musicLabel = new VisLabel(String.valueOf(score));
 
 
         table.row();
