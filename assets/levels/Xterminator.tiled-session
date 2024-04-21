@@ -1,0 +1,65 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Xterminator.tmx",
+    "automapping.whileDrawing": false,
+    "expandedProjectPaths": [
+        ".",
+        "jbombermanx-develop/jbombermanx-develop"
+    ],
+    "file.lastUsedOpenFilter": "Todos los archivos (*)",
+    "fileStates": {
+        "C:/Users/sanph/Downloads/minijumper2dx-develop/minijumper2dx-develop/assets/levels/level1.tmx": {
+            "scale": 1,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 2954,
+                "y": 497
+            }
+        },
+        "C:/Users/sanph/Downloads/minijumper2dx-develop/minijumper2dx-develop/assets/levels/level1.tmx#balloon": {
+            "scaleInDock": 1
+        },
+        "C:/Users/sanph/Downloads/minijumper2dx-develop/minijumper2dx-develop/assets/levels/level1.tmx#blue_tile": {
+            "scaleInDock": 1
+        },
+        "C:/Users/sanph/Downloads/minijumper2dx-develop/minijumper2dx-develop/assets/levels/level1.tmx#cloud": {
+            "scaleInDock": 1
+        },
+        "C:/Users/sanph/Downloads/minijumper2dx-develop/minijumper2dx-develop/assets/levels/level1.tmx#green_bubble_left_1": {
+            "scaleInDock": 1
+        },
+        "C:/Users/sanph/Downloads/minijumper2dx-develop/minijumper2dx-develop/assets/levels/level1.tmx#tileset-platformer": {
+            "scaleInDock": 1
+        },
+        "Tiles.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Xterminator.tmx": {
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 2202,
+                "y": 375
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/sanph/Downloads/asserts/Final/Final",
+    "map.lastUsedFormat": "tmx",
+    "map.width": 40,
+    "openFiles": [
+        "Xterminator.tmx",
+        "C:/Users/sanph/Downloads/minijumper2dx-develop/minijumper2dx-develop/assets/levels/level1.tmx"
+    ],
+    "project": "Xterminator.tiled-project",
+    "recentFiles": [
+        "C:/Users/sanph/Downloads/minijumper2dx-develop/minijumper2dx-develop/assets/levels/level1.tmx",
+        "Xterminator.tmx",
+        "Tiles.tsx"
+    ],
+    "resizeMap.removeObjects": false,
+    "tileset.lastUsedFormat": "tsx"
+}

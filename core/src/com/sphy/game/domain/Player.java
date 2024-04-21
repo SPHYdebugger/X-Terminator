@@ -12,7 +12,8 @@ import lombok.Data;
 
 public class Player extends Character {
 
-    public int score;
+    private String playerName;
+    private int score;
     public int lives;
 
 
@@ -28,10 +29,21 @@ public class Player extends Character {
         lives = 3;
     }
 
+    public String getPlayerName() {
+        return playerName;
+    }
 
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
 
+    public int getScore() {
+        return score;
+    }
 
-
+    public void setScore(int score) {
+        this.score = score;
+    }
 
     @Override
     public void dispose() {

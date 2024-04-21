@@ -2,7 +2,6 @@ package com.sphy.game.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -10,11 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
+import com.sphy.game.manager.PreferencesManager;
 
 public class PreferenceScreen implements Screen {
 
     Stage stage;
-    Preferences prefs;
+
 
     private void loadScreen() {
         if (!VisUI.isLoaded())
@@ -30,10 +30,10 @@ public class PreferenceScreen implements Screen {
         title.setFontScale(2.5f);
 
         final VisCheckBox checkSound = new VisCheckBox("SOUND");
-        checkSound.setChecked(prefs.getBoolean("sound"));
+        checkSound.setChecked(PreferencesManager.isSoundEnable());
         checkSound.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                prefs.putBoolean("sound", checkSound.isChecked());
+                PreferencesManager.switchSound(checkSound.isChecked());
             }
         });
 
@@ -42,19 +42,19 @@ public class PreferenceScreen implements Screen {
         String[] resolutionsArray = {"LOW", "MEDIUM", "HIGH"};
         final VisList difficultyList = new VisList();
         difficultyList.setItems(resolutionsArray);
-
+        difficultyList.setSelected(PreferencesManager.getDifficulty());
         difficultyList.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
                 switch (difficultyList.getSelectedIndex()) {
                     case 0:
-                        prefs.putString("difficulty", "low");
+                        PreferencesManager.setDifficulty("LOW");
                         break;
                     case 1:
-                        prefs.putString("difficulty", "medium");
+                        PreferencesManager.setDifficulty("MEDIUM");
                         break;
                     case 2:
-                        prefs.putString("difficulty", "high");
+                        PreferencesManager.setDifficulty("HIGH");
                         break;
                     default:
                 }
@@ -64,7 +64,7 @@ public class PreferenceScreen implements Screen {
         VisTextButton exitButton = new VisTextButton("MAIN MENU");
         exitButton.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                prefs.flush();
+                PreferencesManager.save();
                 dispose();
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
             }
@@ -87,10 +87,10 @@ public class PreferenceScreen implements Screen {
     }
 
     private void loadPreferences() {
-        prefs = Gdx.app.getPreferences("GamePreferences");
 
-        if (!prefs.contains("sound"))
-            prefs.putBoolean("sound", true);
+
+        if (!PreferencesManager.existSound())
+            PreferencesManager.enableSound();
     }
 
     @Override
