@@ -13,15 +13,15 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.sphy.game.domain.Bullet;
 import com.sphy.game.domain.Enemy;
 import com.sphy.game.domain.Player;
-import com.sphy.game.manager.PreferencesManager;
-import com.sphy.game.manager.RenderManager;
-import com.sphy.game.manager.SpriteManager;
+import com.sphy.game.manager.*;
 
 
 public class GameScreen implements Screen {
 
     SpriteManager spriteManager;
     RenderManager renderManager;
+    LevelManager levelManager;
+    CameraManager cameraManager;
 
 
 
@@ -29,15 +29,24 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         spriteManager = new SpriteManager();
-        renderManager = new RenderManager(spriteManager);
+        levelManager = new LevelManager(spriteManager);
+        cameraManager = new CameraManager(spriteManager,levelManager);
+
+        levelManager.setCameraManager(cameraManager);
+        levelManager.loadCurrentLevel();
+
+        renderManager = new RenderManager(spriteManager, cameraManager, levelManager.batch);
     }
 
 
 
     @Override
     public void render(float dt) {
+        cameraManager.handleCamera();
         spriteManager.update(dt);
+
         renderManager.draw();
+        renderManager = new RenderManager(spriteManager,cameraManager, levelManager.batch);
 
     }
 

@@ -5,14 +5,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.sphy.game.manager.PreferencesManager;
 
 public class MainMenuScreen implements Screen {
 
@@ -30,8 +36,7 @@ public class MainMenuScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
         initSound = Gdx.audio.newSound(Gdx.files.internal("sounds/popdance.mp3"));
-        Preferences prefs = Gdx.app.getPreferences("GamePreferences");
-        if (prefs.getBoolean("sound")){
+        if (PreferencesManager.isSoundEnable()){
             initSound.play();
         }
 
@@ -72,6 +77,18 @@ public class MainMenuScreen implements Screen {
                 "License code: BFZ3QBQDHC9HCJ9A");
 
         // Añade filas a la tabla y añade los componentes
+        /*VisLabel nameLabel = new VisLabel("Type your name");
+        BitmapFont font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        TextField.TextFieldStyle style = new TextField.TextFieldStyle();
+        style.fontColor = Color.BLACK;
+        style.font = font;
+        TextField playerNameField = new TextField("",style);
+        table.row();
+        table.add(nameLabel);
+        table.row();
+        table.add(playerNameField);*/
+
+
         table.row();
         table.add(playButton).center().width(200).height(100).pad(5);
         table.row();
