@@ -1,4 +1,4 @@
-package com.sphy.game.manager;
+package com.sphy.game.manager2;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -9,18 +9,18 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-public class CameraManager {
+public class CameraManager2 {
 
-    SpriteManager spriteManager;
-    LevelManager levelManager;
+    SpriteManager2 spriteManager2;
+    LevelManager2 levelManager2;
     OrthographicCamera camera;
 
 
 
 
-    public CameraManager(SpriteManager spriteManager, LevelManager levelManager){
-        this. spriteManager = spriteManager;
-        this.levelManager = levelManager;
+    public CameraManager2(SpriteManager2 spriteManager2, LevelManager2 levelManager2){
+        this. spriteManager2 = spriteManager2;
+        this.levelManager2 = levelManager2;
 
 
         camera =new OrthographicCamera();
@@ -31,18 +31,15 @@ public class CameraManager {
     }
 
     public void handleCamera(){
-        if (spriteManager.player.position.x <(float) (40*32)/2){
+        if (spriteManager2.player.position.x <(float) (40*32)/2){
             camera.position.set((float) (40*32)/2, (float)(20*32)/2,0);
-        }else if  (spriteManager.player.position.x >(float) (125*32)/2){
-                camera.position.set((float) (125*32)/2, (float)(20*32)/2,0);
         }else{
-            camera.position.set(spriteManager.player.position.x,(float)(20*32)/2,0);
+            camera.position.set(spriteManager2.player.position.x,(float)(20*32)/2,0);
         }
 
-
         camera.update();
-        levelManager.mapRender.setView(camera);
-        levelManager.mapRender.render(new int[]{0,1,2,3});
+        levelManager2.mapRender.setView(camera);
+        levelManager2.mapRender.render(new int[]{0,1});
 
 
     }

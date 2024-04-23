@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -23,24 +24,31 @@ public class GameScreen implements Screen {
     LevelManager levelManager;
     CameraManager cameraManager;
 
+    Stage stage;
 
 
 
     @Override
     public void show() {
 
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
         ResourceManager.loadAllResources();
 
         while (!ResourceManager.update()) {}
 
         spriteManager = new SpriteManager();
+        spriteManager.setStage(stage);
         levelManager = new LevelManager(spriteManager);
         cameraManager = new CameraManager(spriteManager,levelManager);
 
+        spriteManager.setCameraManager(cameraManager);
         levelManager.setCameraManager(cameraManager);
         levelManager.loadCurrentLevel();
 
         renderManager = new RenderManager(spriteManager, cameraManager, levelManager.batch);
+
+
     }
 
 
@@ -52,7 +60,8 @@ public class GameScreen implements Screen {
 
         renderManager.draw();
         renderManager = new RenderManager(spriteManager,cameraManager, levelManager.batch);
-
+        stage.act(dt);
+        stage.draw();
     }
 
     @Override

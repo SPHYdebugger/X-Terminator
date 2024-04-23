@@ -26,7 +26,7 @@ public class Character implements Disposable {
         animation = new Animation<>(0.15f, ResourceManager.getAnimation(animationName));
         currentFrame = animation.getKeyFrame(0);
 
-        rect = new Rectangle(position.x, position.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
+        rect = new Rectangle(position.x + 10, position.y, currentFrame.getRegionWidth()-40, currentFrame.getRegionHeight());
     }
 
     public void draw(Batch batch) {

@@ -14,6 +14,7 @@ import lombok.Data;
 
 public class Player extends Character {
 
+
     private String playerName;
     private int score;
     public int lives;
