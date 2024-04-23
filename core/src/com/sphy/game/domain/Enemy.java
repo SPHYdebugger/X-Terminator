@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Enemy extends Character {
 
-    public Enemy(Texture texture, Vector2 position) {
-        super(texture, position);
+    public Enemy(Vector2 position, String animationName) {
+        super(position, animationName);
     }
 }

@@ -28,6 +28,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+
+        ResourceManager.loadAllResources();
+
+        while (!ResourceManager.update()) {}
+
         spriteManager = new SpriteManager();
         levelManager = new LevelManager(spriteManager);
         cameraManager = new CameraManager(spriteManager,levelManager);
