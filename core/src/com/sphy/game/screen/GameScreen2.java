@@ -27,6 +27,11 @@ public class GameScreen2 implements Screen {
     RenderManager2 renderManager2;
     LevelManager2 levelManager2;
     CameraManager2 cameraManager2;
+    Player player;
+
+    public GameScreen2(Player player){
+        this.player=player;
+    }
 
 
 
@@ -40,7 +45,7 @@ public class GameScreen2 implements Screen {
 
 
 
-        spriteManager2 = new SpriteManager2();
+        spriteManager2 = new SpriteManager2(player);
 
         levelManager2 = new LevelManager2(spriteManager2);
         cameraManager2 = new CameraManager2(spriteManager2,levelManager2);
