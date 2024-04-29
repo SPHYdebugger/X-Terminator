@@ -18,16 +18,16 @@ public class ResourceManager {
     }
 
     public static void loadAllResources() {
-        assetManager.load("textures/XterFinal.atlas", TextureAtlas.class);
+        assetManager.load("textures/xter.atlas", TextureAtlas.class);
         loadAllSounds();
     }
 
     public static TextureRegion getTexture(String name) {
-        return assetManager.get("textures/XterFinal.atlas", TextureAtlas.class).findRegion(name);
+        return assetManager.get("textures/xter.atlas", TextureAtlas.class).findRegion(name);
     }
 
     public static Array<TextureAtlas.AtlasRegion> getAnimation(String name) {
-        return assetManager.get("textures/XterFinal.atlas", TextureAtlas.class).findRegions(name);
+        return assetManager.get("textures/xter.atlas", TextureAtlas.class).findRegions(name);
     }
 
     private static void loadAllSounds() {

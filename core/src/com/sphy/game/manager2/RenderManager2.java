@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.sphy.game.domain.Bullet;
 import com.sphy.game.domain.Enemy;
+import com.sphy.game.domain.FinalEnemy;
 
 public class RenderManager2 implements Disposable {
 
@@ -40,46 +41,46 @@ public class RenderManager2 implements Disposable {
 
         batch.begin();
         //batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        //drawHud();
+        drawHud();
         drawPlayer();
-        //drawEnemies();
-        //drawTiledEnemies();
+        drawEnemies();
+        drawTiledEnemies();
 
         batch.end();
 
         spriteManager2.manageInput();
-        //spriteManager2.handleCollisions();
+        spriteManager2.handleCollisions();
     }
 
     private void drawPlayer(){
         spriteManager2.player.draw(batch);
 
-        for (Bullet bullet : spriteManager2.bulletsL) {
+        for (Bullet bullet : spriteManager2.bulletsL2) {
             bullet.draw(batch);
         }
-        for (Bullet bullet : spriteManager2.bulletsR) {
+        for (Bullet bullet : spriteManager2.bulletsR2) {
             bullet.draw(batch);
         }
     }
 
     private void drawEnemies(){
-        for (Enemy enemy : spriteManager2.enemiesR)
+        for (Enemy enemy : spriteManager2.enemiesR2)
             enemy.draw(batch);
-        for (Enemy enemy : spriteManager2.enemiesL)
+        for (Enemy enemy : spriteManager2.enemiesL2)
             enemy.draw(batch);
     }
 
-    private void drawTiledEnemies(){
-        for (Enemy enemy : spriteManager2.enemiesRTiled)
-            enemy.draw(batch);
-        for (Enemy enemy : spriteManager2.enemiesLTiled)
-            enemy.draw(batch);
+    private void drawTiledEnemies() {
+
+        spriteManager2.enemyTiled.draw(batch);
     }
-    private void drawHud(){
+
+    public void drawHud(){
         font.draw(batch, " LIVES:  " + spriteManager2.player.lives, cameraManager2.camera.position.x - 500 , cameraManager2.camera.position.y + 200);
         font.draw(batch, " SCORE:  " + spriteManager2.score, cameraManager2.camera.position.x - 300 , cameraManager2.camera.position.y + 200);
         //font.draw(batch, "LIVES: " + spriteManager.player.lives, 20, Gdx.graphics.getHeight() - 20);
         //font.draw(batch, "SCORE: " + spriteManager.score, 20, Gdx.graphics.getHeight() - 50);
+        font.draw(batch, " Enemy DAMAGE:  " + spriteManager2.enemyTiled.damage, cameraManager2.camera.position.x - 500 , cameraManager2.camera.position.y + 190);
     }
 
 

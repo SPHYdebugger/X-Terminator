@@ -3,11 +3,11 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Xterminator.tmx",
+    "activeFile": "FinalLevel.tmx",
     "automapping.whileDrawing": false,
     "expandedProjectPaths": [
-        "jbombermanx-develop/jbombermanx-develop",
-        "."
+        ".",
+        "jbombermanx-develop/jbombermanx-develop"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
@@ -42,32 +42,44 @@
                 "y": 322.30215827338134
             }
         },
+        "FinalLevel.tmx": {
+            "scale": 0.7074107142857142,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 621.9866212293323,
+                "y": 327.9565821027389
+            }
+        },
         "Tiles.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "Xterminator.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
             "scale": 0.75,
-            "selectedLayer": 3,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 2604,
-                "y": 516
+                "x": 2617.333333333333,
+                "y": 382.6666666666667
             }
         }
     },
     "last.imagePath": "C:/Users/sanph/Downloads/asserts/Final/Final",
     "map.lastUsedFormat": "tmx",
-    "map.width": 60,
+    "map.width": 35,
     "openFiles": [
         "Xterminator.tmx",
         "Tiles.tsx",
-        "C:/Users/sanph/Downloads/minijumper2dx-develop/minijumper2dx-develop/assets/levels/level1.tmx"
+        "FinalLevel.tmx"
     ],
     "project": "Xterminator.tiled-project",
     "recentFiles": [
-        "C:/Users/sanph/Downloads/minijumper2dx-develop/minijumper2dx-develop/assets/levels/level1.tmx",
+        "FinalLevel.tmx",
+        "Xterminator.tmx",
         "Tiles.tsx",
-        "Xterminator.tmx"
+        "C:/Users/sanph/Downloads/minijumper2dx-develop/minijumper2dx-develop/assets/levels/level1.tmx"
     ],
     "resizeMap.removeObjects": false,
     "tileset.lastUsedFormat": "tsx"

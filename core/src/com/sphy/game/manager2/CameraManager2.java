@@ -39,7 +39,7 @@ public class CameraManager2 {
 
         camera.update();
         levelManager2.mapRender.setView(camera);
-        levelManager2.mapRender.render(new int[]{0,1});
+        levelManager2.mapRender.render(new int[]{0,1,2,3});
 
 
     }

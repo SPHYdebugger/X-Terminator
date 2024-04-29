@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.sphy.game.domain.Bullet;
 import com.sphy.game.domain.Enemy;
+import com.sphy.game.domain.FinalEnemy;
 import com.sphy.game.domain.Player;
 import com.sphy.game.items.Goal;
 import com.sphy.game.items.Stone;
@@ -26,35 +27,41 @@ import com.sphy.game.screen.GameScreen;
 import com.sphy.game.screen.GameScreen2;
 import com.sphy.game.screen.MainMenuScreen;
 
+import static com.badlogic.gdx.math.MathUtils.random;
+
 public class SpriteManager2 implements Disposable {
 
 
     Player player;
-    Bullet bullet;
+    Bullet bullet2;
     Sound gunSound;
     Sound hitSound;
     Sound boomSound;
     Sound jumpSound;
     Sound gameOverSound;
-    Array<Enemy> enemiesR;
-    Array<Enemy> enemiesL;
-    Array<Enemy> enemiesRTiled;
-    Array<Enemy> enemiesLTiled;
+    Array<Enemy> enemiesR2;
+    Array<Enemy> enemiesL2;
+
+
+
+    FinalEnemy enemyTiled;
+
     Array<Stone> stones;
-    float lastEnemyR;
-    float lastEnemyL;
-    Array<Bullet> bulletsR;
-    Array<Bullet> bulletsL;
+    float lastEnemyR2;
+    float lastEnemyL2;
+    Array<Bullet> bulletsR2;
+    Array<Bullet> bulletsL2;
     boolean pause;
     boolean noMoveRigth;
     boolean noMoveLeft;
     boolean isOnGround;
     long lastBulletTime;
     int playerDirection;
-    float randomDelayR = MathUtils.random(2f, 4f) * 1000000000;
-    float randomDelayL = MathUtils.random(2f, 4f) * 1000000000;
-    int score =0;
-    float enemyYdown = 135;
+    float randomDelayR = random(2f, 4f) * 1000000000;
+    float randomDelayL = random(2f, 4f) * 1000000000;
+    int score;
+    float speed = 2;
+    float enemyYdown = 125;
     float enemyYup = 385;
 
     private LevelManager2 levelManager2;
@@ -62,8 +69,8 @@ public class SpriteManager2 implements Disposable {
     private Goal goal;
 
 
-    public SpriteManager2(){
-
+    public SpriteManager2(Player player){
+        this.player = player;
         initialize();
     }
 
@@ -75,25 +82,30 @@ public class SpriteManager2 implements Disposable {
         this.goal = goal;
     }
 
-
+    public void setEnemyTiled(FinalEnemy enemyTiled) {
+        this.enemyTiled = enemyTiled;
+    }
 
     public void initialize(){
-        player = new Player(new Vector2(100, 232), "SofiDER");
-
+        player.position.x= 100;
+        player.rect.x=100;
+        player.position.y= 32;
+        player.rect.y= 32;
+        score= player.getScore();
         boomSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
         gunSound = Gdx.audio.newSound(Gdx.files.internal("sounds/gun.wav"));
         hitSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hurt.mp3"));
         jumpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/jump.wav"));
         gameOverSound = Gdx.audio.newSound(Gdx.files.internal("sounds/gameover.wav"));
-        //enemiesR = new Array<>();
-        //enemiesL = new Array<>();
-        //enemiesRTiled = new Array<>();
-        //enemiesLTiled = new Array<>();
-        //stones = new Array<>();
-        bulletsR = new Array<>();
-        bulletsL = new Array<>();
-        lastEnemyR = TimeUtils.nanoTime();
-        lastEnemyL = TimeUtils.nanoTime();
+        enemiesR2 = new Array<>();
+        enemiesL2 = new Array<>();
+
+
+        stones = new Array<>();
+        bulletsR2 = new Array<>();
+        bulletsL2 = new Array<>();
+        lastEnemyR2 = TimeUtils.nanoTime();
+        lastEnemyL2 = TimeUtils.nanoTime();
         pause = false;
         noMoveRigth = false;
         noMoveLeft = false;
@@ -110,50 +122,48 @@ public class SpriteManager2 implements Disposable {
         float y = MathUtils.randomBoolean() ? enemyYdown : enemyYup;
 
         Enemy enemyR = new Enemy(new Vector2(xR, y), "arana");
-        enemiesR.add(enemyR);
-        lastEnemyR = TimeUtils.nanoTime();
+        enemiesR2.add(enemyR);
+
+        lastEnemyR2 = TimeUtils.nanoTime();
     }
     public void spawnEnemyL() {
         //crear un enemigo por la izquierda
         float y = MathUtils.randomBoolean() ? enemyYdown : enemyYup;
         int xL = 0;
         Enemy enemyL = new Enemy(new Vector2(xL, y), "arana");
-        enemiesL.add(enemyL);
-        lastEnemyL = TimeUtils.nanoTime();
+        enemiesL2.add(enemyL);
+        lastEnemyL2 = TimeUtils.nanoTime();
     }
 
-    public void updateEnemies(){
+    public void updateEnemies(float dt){
         //Mover enemigos de la derecha de Tiled
-        for (Enemy enemy: enemiesRTiled){
-            if (!cameraManager2.camera.frustum.pointInFrustum(enemy.position.x, enemy.position.y, 0)){
-                continue;
+
+            if (cameraManager2.camera.frustum.pointInFrustum(enemyTiled.position.x, enemyTiled.position.y, 0)){
+                enemyTiled.update(dt);
             }
-            enemy.move(-5, 0);
-        }
+
+
+
 
         //dibujar un enemigo por la derecha y moverlo
-        if (TimeUtils.nanoTime() - lastEnemyR > randomDelayR)
-            //spawnEnemyR();
-            for (Enemy enemy : enemiesR) {
+        if (TimeUtils.nanoTime() - lastEnemyR2 > randomDelayR)
+            spawnEnemyR();
+            for (Enemy enemy : enemiesR2) {
                 enemy.move(-5, 0);
                 if (enemy.position.x < 0){
-                    enemiesR.removeValue(enemy, true);
+                    enemiesR2.removeValue(enemy, true);
                 }
             }
 
 
-        //Mover enemigos de la izquierda de Tiled
-        for (Enemy enemy: enemiesLTiled){
 
-            enemy.move(5, 0);
-        }
         //dibujar un enemigo por la izquierda y moverlo
-        if (TimeUtils.nanoTime() - lastEnemyL > randomDelayL)
-            //spawnEnemyL();
-            for (Enemy enemy : enemiesL) {
+        if (TimeUtils.nanoTime() - lastEnemyL2 > randomDelayL)
+            spawnEnemyL();
+            for (Enemy enemy : enemiesL2) {
                 enemy.move(5, 0);
-                if (enemy.position.x > Gdx.graphics.getWidth()*3){
-                    enemiesL.removeValue(enemy, true);
+                if (enemy.position.x > Gdx.graphics.getWidth()){
+                    enemiesL2.removeValue(enemy, true);
                 }
             }
 
@@ -164,27 +174,27 @@ public class SpriteManager2 implements Disposable {
     private void spawnBullet() {
         //crear la bala según la orientación del jugador
         if (playerDirection == 1) {
-            Bullet newBullet = new Bullet(new Vector2(player.position.x + player.texture.getWidth(), player.position.y + 140),"BulletR");
-            bulletsR.add(newBullet);
+            Bullet newBullet = new Bullet(new Vector2(player.position.x + player.currentFrame.getRegionWidth(), player.position.y + 140),"BulletR");
+            bulletsR2.add(newBullet);
         } else {
             Bullet newBullet = new Bullet(new Vector2(player.position.x, player.position.y + 140),"BulletL");
-            bulletsL.add(newBullet);
+            bulletsL2.add(newBullet);
         }
     }
 
     public void updateBullets(){
         //mover las balas de la derecha
-        for (Bullet bullet : bulletsR) {
+        for (Bullet bullet : bulletsR2) {
             bullet.move(10, 0);
-            if (bullet.position.x > player.position.x + player.texture.getWidth() +200){
-                bulletsR.removeValue(bullet, true);
+            if (bullet.position.x > Gdx.graphics.getWidth()*2){
+                bulletsR2.removeValue(bullet, true);
             }
         }
         //mover las balas de la izquierda
-        for (Bullet bullet : bulletsL) {
+        for (Bullet bullet : bulletsL2) {
             bullet.move(-10, 0);
-            if (bullet.position.x < player.position.x -200){
-                bulletsL.removeValue(bullet, true);
+            if (bullet.position.x < 0){
+                bulletsL2.removeValue(bullet, true);
             }
         }
     }
@@ -194,7 +204,7 @@ public class SpriteManager2 implements Disposable {
 
 
     public void handleCollisions() {
-        for (Enemy enemy : enemiesR) {
+        for (Enemy enemy : enemiesR2) {
             //colision de un enemigo que viene por la derecha con el jugador
             if (enemy.rect.overlaps(player.rect)) {
                 player.lives--;
@@ -204,16 +214,16 @@ public class SpriteManager2 implements Disposable {
                     gameOverScreen.setScore(score);
                     ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
                 }
-                enemiesR.removeValue(enemy, true);
+                enemiesR2.removeValue(enemy, true);
                 if (PreferencesManager.isSoundEnable())
                     hitSound.play();
             }
             //colision de un enemigo que viene por la derecha con la bala
-            for (Bullet bullet : bulletsR) {
+            for (Bullet bullet : bulletsR2) {
                 if (enemy.rect.overlaps(bullet.rect)) {
                     score += 100;
-                    enemiesR.removeValue(enemy, true);
-                    bulletsR.removeValue(bullet, true);
+                    enemiesR2.removeValue(enemy, true);
+                    bulletsR2.removeValue(bullet, true);
                     if (PreferencesManager.isSoundEnable())
                         boomSound.play();
                 }
@@ -221,12 +231,14 @@ public class SpriteManager2 implements Disposable {
         }
 
         //colision de un enemigo que viene por la izquierda con el jugador
-        for (Enemy enemy : enemiesL) {
+        for (Enemy enemy : enemiesL2) {
             if (enemy.rect.overlaps(player.rect)) {
                 player.lives--;
                 if (player.lives == 0) {
                     pause = true;
-                    gameOverSound.play();
+                    if (PreferencesManager.isSoundEnable())
+                        gameOverSound.play();
+
                     GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
                     gameOverScreen.setScore(score);
                     Timer.schedule(new Timer.Task() {
@@ -242,98 +254,65 @@ public class SpriteManager2 implements Disposable {
 
 
                 }
-                enemiesL.removeValue(enemy, true);
+                enemiesL2.removeValue(enemy, true);
                 if (PreferencesManager.isSoundEnable())
                     hitSound.play();
             }
             //colision de un enemigo que viene por la izquierda con la bala
-            for (Bullet bullet : bulletsL) {
+            for (Bullet bullet : bulletsL2) {
                 if (enemy.rect.overlaps(bullet.rect)) {
                     score += 100;
-                    enemiesL.removeValue(enemy, true);
-                    bulletsL.removeValue(bullet, true);
+                    enemiesL2.removeValue(enemy, true);
+                    bulletsL2.removeValue(bullet, true);
                     if (PreferencesManager.isSoundEnable())
                         boomSound.play();
                 }
             }
         }
 
-        for (Enemy enemy : enemiesRTiled) {
-            //colision de un enemigoTiled que viene por la derecha con el jugador
-            if (enemy.rect.overlaps(player.rect)) {
-                player.lives--;
-                if (player.lives == 0) {
+
+        //colision de un enemigoTiled que viene por la derecha con el jugador
+        if (enemyTiled.rect.overlaps(player.rect)) {
+            player.lives--;
+            if (player.lives == 0) {
+                pause = true;
+                GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
+                gameOverScreen.setScore(score);
+                ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
+            }
+
+            if (PreferencesManager.isSoundEnable())
+                hitSound.play();
+        }
+
+        for (Bullet bullet : bulletsR2) {
+            if (enemyTiled.rect.overlaps(bullet.rect)) {
+                score += 300;
+                enemyTiled.damage = enemyTiled.damage-100;
+                bulletsR2.removeValue(bullet, true);
+                if (enemyTiled.damage == 0) {
                     pause = true;
                     GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
                     gameOverScreen.setScore(score);
                     ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
                 }
-                enemiesRTiled.removeValue(enemy, true);
                 if (PreferencesManager.isSoundEnable())
-                    hitSound.play();
-            }
-            //colision de un enemigoTiled que viene por la derecha con la bala
-            for (Bullet bullet : bulletsR) {
-                if (enemy.rect.overlaps(bullet.rect)) {
-                    score += 100;
-                    enemiesRTiled.removeValue(enemy, true);
-                    bulletsR.removeValue(bullet, true);
-                    if (PreferencesManager.isSoundEnable())
-                        boomSound.play();
-                }
+                    boomSound.play();
             }
         }
 
-        //colision de un enemigoTiled que viene por la izquierda con el jugador
-        for (Enemy enemy : enemiesLTiled) {
-            if (enemy.rect.overlaps(player.rect)) {
-                player.lives--;
-                if (player.lives == 0) {
-                    pause = true;
-                    gameOverSound.play();
-                    GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
-                    gameOverScreen.setScore(score);
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-
-                            ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
-                            gameOverScreen.setScore(score);
-                        }
-                    }, 2);
 
 
 
 
-                }
-                enemiesLTiled.removeValue(enemy, true);
-                if (PreferencesManager.isSoundEnable())
-                    hitSound.play();
-            }
-            //colision de un enemigo que viene por la izquierda con la bala
-            for (Bullet bullet : bulletsL) {
-                if (enemy.rect.overlaps(bullet.rect)) {
-                    score += 100;
-                    enemiesLTiled.removeValue(enemy, true);
-                    bulletsL.removeValue(bullet, true);
-                    if (PreferencesManager.isSoundEnable())
-                        boomSound.play();
-                }
-            }
-        }
 
         for (Stone stone : stones){
             Rectangle stoneRect = new Rectangle(stone.getX(), stone.getY(), stone.getWidth(), stone.getHeigth());
-            if (player.rect.overlaps(stoneRect) || isOnGround) {
-                if (player.position.x < stone.getX()){
-                    noMoveRigth = true;
-                } else noMoveRigth = false;
-                if (player.position.x > stone.getX()){
-                    noMoveLeft = true;
-                } else noMoveLeft = false;
-            } else {
-                noMoveLeft = false;
-                noMoveRigth = false;
+
+            if (player.rect.overlaps(stoneRect) && player.position.y >= stone.getY()) {
+                player.position.y = 192;
+
+                player.rect.y = 192;
             }
 
         }
@@ -350,35 +329,45 @@ public class SpriteManager2 implements Disposable {
 
     public void update(float dt){
         if (!pause) {
-            //updateEnemies();
+            updateEnemies(dt);
+
         }
-        //updateBullets();
+        updateBullets();
     }
 
     public void manageInput() {
+        boolean isMoving = false;
+
         //moverse a la derecha
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             playerDirection = 1;
-            player.texture = new Texture("textures/SofiDER.png");
-
+            player.changeAnimation("SofiDER");
             if (!noMoveRigth){
                 player.move(10,0);
+                isMoving = true;
             }
-
             // moverse a la izquierda
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             playerDirection = 0;
-            player.texture = new Texture("textures/SofiIZQ.png");
+            player.changeAnimation("SofiIZQ");
             if (!noMoveLeft){
                 player.move(-10,0);
+                isMoving = true;
             }
-
         }
+
         //Saltar
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             if (player.position.y == 32) {
                 player.move(0,300);
-                jumpSound.play();
+                if (PreferencesManager.isSoundEnable())
+                    jumpSound.play();
+
+            }
+            if (player.position.y == 192) {
+                player.move(0,150);
+                if (PreferencesManager.isSoundEnable())
+                    jumpSound.play();
             }
         }
         // caer poco a poco
@@ -386,13 +375,14 @@ public class SpriteManager2 implements Disposable {
             player.move(0,-10);
         }
 
-
         //Disparar
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             long currentTime = TimeUtils.nanoTime();
             if (currentTime - lastBulletTime > 300000000) { // 0.3 segundos en nanosegundos
-                //spawnBullet();
-                gunSound.play();
+                spawnBullet();
+                if (PreferencesManager.isSoundEnable())
+                    gunSound.play();
+
                 lastBulletTime = currentTime;
             }
         }
@@ -406,13 +396,18 @@ public class SpriteManager2 implements Disposable {
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             pause = !pause;
         }
+
+        // Si no se está moviendo, detener la animación
+        if (!isMoving) {
+            player.stopAnimation();
+        }
     }
 
     @Override
     public void dispose() {
         //liberar la memoria
         player.dispose();
-        bullet.dispose();
+        bullet2.dispose();
     }
 
     private void showVictoryMessage() {
@@ -430,7 +425,7 @@ public class SpriteManager2 implements Disposable {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen2());
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameOverMenuScreen());
             }
         }, 3);
     }

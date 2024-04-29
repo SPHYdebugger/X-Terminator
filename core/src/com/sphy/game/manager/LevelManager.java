@@ -40,9 +40,9 @@ public class LevelManager {
         objectsLayer = map.getLayers().get("Objects");
         mapRender = new OrthogonalTiledMapRenderer(map);
         batch = mapRender.getBatch();
-        System.out.println("a punto de entrar");
+        System.out.println("a punto de entrar1");
         int objectsNumber = objectsLayer.getObjects().getCount();
-        System.out.println("numero de objetos en la capa " + objectsNumber);
+        System.out.println("numero de objetos en la capa1 " + objectsNumber);
 
         loadStones();
 
