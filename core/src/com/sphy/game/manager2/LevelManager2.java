@@ -1,4 +1,4 @@
-package com.sphy.game.manager;
+package com.sphy.game.manager2;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayer;
@@ -13,41 +13,42 @@ import com.sphy.game.domain.Enemy;
 import com.sphy.game.items.Goal;
 import com.sphy.game.items.Stone;
 
-public class LevelManager {
+
+public class LevelManager2 {
     TiledMap map;
     TiledMapTileLayer backgroundLayer;
     TiledMapTileLayer collitionLayer;
     MapLayer objectsLayer;
     OrthogonalTiledMapRenderer mapRender;
-    SpriteManager spriteManager;
-    CameraManager cameraManager;
+    SpriteManager2 spriteManager2;
+    CameraManager2 cameraManager2;
     public Batch batch;
     Enemy enemy;
 
 
-    public LevelManager(SpriteManager spriteManager){
-        this.spriteManager = spriteManager;
+    public LevelManager2(SpriteManager2 spriteManager2){
+        this.spriteManager2 = spriteManager2;
 
     }
 
-    public void setCameraManager(CameraManager cameraManager) {
-        this.cameraManager = cameraManager;
+    public void setCameraManager(CameraManager2 cameraManager2) {
+        this.cameraManager2 = cameraManager2;
     }
 
-    public void loadCurrentLevel(){
+    public void loadCurrentLevel2(){
         map = new TmxMapLoader().load("levels/Xterminator.tmx");
         collitionLayer = (TiledMapTileLayer) map.getLayers().get("terrain");
         objectsLayer = map.getLayers().get("Objects");
         mapRender = new OrthogonalTiledMapRenderer(map);
         batch = mapRender.getBatch();
         System.out.println("a punto de entrar");
-        int objectsNumber = objectsLayer.getObjects().getCount();
-        System.out.println("numero de objetos en la capa " + objectsNumber);
+        //int objectsNumber = objectsLayer.getObjects().getCount();
+        //System.out.println("numero de objetos en la capa " + objectsNumber);
 
-        loadStones();
+        //loadStones();
 
-        loadEnemies();
-        loadGoal();
+        //loadEnemies();
+        //loadGoal();
     }
 
     private void loadEnemies() {
@@ -60,13 +61,13 @@ public class LevelManager {
                 if (objectTitle.getProperties().containsKey("enemyL")){
                     enemy = new Enemy(new Vector2(objectTitle.getX(),objectTitle.getY()),"arana");
                     System.out.println("ENEMIGO L AÑADIDO");
-                    spriteManager.enemiesLTiled.add(enemy);
+                    spriteManager2.enemiesLTiled.add(enemy);
 
                 }
                 if (objectTitle.getProperties().containsKey("enemyR")){
                     enemy = new Enemy(new Vector2(objectTitle.getX(),objectTitle.getY()),"arana");
                     System.out.println("ENEMIGO R AÑADIDO");
-                    spriteManager.enemiesRTiled.add(enemy);
+                    spriteManager2.enemiesRTiled.add(enemy);
 
                 }
             }
@@ -92,7 +93,7 @@ public class LevelManager {
                     float width = objectTitle.getProperties().get("width", Float.class);
                     float height = objectTitle.getProperties().get("height", Float.class);
                     Stone stone = new Stone(stoneX, stoneY, width,height);
-                    spriteManager.stones.add(stone);
+                    spriteManager2.stones.add(stone);
 
                 }
             }
@@ -110,7 +111,7 @@ public class LevelManager {
                 if (objectTitle.getProperties().containsKey("goal")){
                     System.out.println("meta AÑADIDA");
                     Goal goal = new Goal(objectTitle.getX(),objectTitle.getY(),objectTitle.getProperties().get("width", Float.class),objectTitle.getProperties().get("height", Float.class));
-                    spriteManager.setGoal(goal);
+                    spriteManager2.setGoal(goal);
                 }
             }
         }
