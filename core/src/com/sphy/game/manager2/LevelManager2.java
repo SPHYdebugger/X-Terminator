@@ -97,22 +97,7 @@ public class LevelManager2 {
         }
     }
 
-    private void loadGoal(){
 
-        for (MapObject object : objectsLayer.getObjects()){
-
-            if (object instanceof TiledMapTileMapObject){
-
-                TiledMapTileMapObject objectTitle = (TiledMapTileMapObject) object;
-
-                if (objectTitle.getProperties().containsKey("goal")){
-                    System.out.println("meta AÑADIDA");
-                    Goal goal = new Goal(objectTitle.getX(),objectTitle.getY(),objectTitle.getProperties().get("width", Float.class),objectTitle.getProperties().get("height", Float.class));
-                    spriteManager2.setGoal(goal);
-                }
-            }
-        }
-    }
 
     public void restartCurrentLevel(){
 

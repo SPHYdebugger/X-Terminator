@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import static com.sphy.game.utils.Constants.TILE_WIDTH;
+
 public class CameraManager {
 
     SpriteManager spriteManager;
@@ -31,12 +33,12 @@ public class CameraManager {
     }
 
     public void handleCamera(){
-        if (spriteManager.player.position.x <(float) (40*32)/2){
-            camera.position.set((float) (40*32)/2, (float)(20*32)/2,0);
-        }else if  (spriteManager.player.position.x >(float) (125*32)/2){
-                camera.position.set((float) (125*32)/2, (float)(20*32)/2,0);
+        if (spriteManager.player.position.x <(float) (40*TILE_WIDTH)/2){
+            camera.position.set((float) (40*TILE_WIDTH)/2, (float)(20*TILE_WIDTH)/2,0);
+        }else if  (spriteManager.player.position.x >(float) (125*TILE_WIDTH)/2){
+                camera.position.set((float) (125*TILE_WIDTH)/2, (float)(20*TILE_WIDTH)/2,0);
         }else{
-            camera.position.set(spriteManager.player.position.x,(float)(20*32)/2,0);
+            camera.position.set(spriteManager.player.position.x,(float)(20*TILE_WIDTH)/2,0);
         }
 
 

@@ -23,11 +23,15 @@ public class GameOverMenuScreen implements Screen {
     Preferences prefs;
     Texture gameOver;
     int score;
+    String playerNameText;
 
     public void setScore(int score) {
         this.score = score;
     }
 
+    public void setPlayerNameText(String playerNameText) {
+        this.playerNameText = playerNameText;
+    }
 
     @Override
     public void show() {
@@ -65,7 +69,7 @@ public class GameOverMenuScreen implements Screen {
                 // Ir a jugar
                 dispose();
                 initSound.stop();
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(playerNameText));
             }
         });
 
@@ -90,9 +94,10 @@ public class GameOverMenuScreen implements Screen {
             }
         });
 
-        VisLabel aboutLabel = new VisLabel("YOUR SCORE");
-
-        VisLabel musicLabel = new VisLabel(String.valueOf(score));
+        VisLabel playerLabel = new VisLabel("PLAYER");
+        VisLabel scoreLabel = new VisLabel("YOUR SCORE");
+        VisLabel playerValue = new VisLabel(String.valueOf(playerNameText));
+        VisLabel scoreValue = new VisLabel(String.valueOf(score));
 
 
         table.row();
@@ -104,9 +109,13 @@ public class GameOverMenuScreen implements Screen {
         table.row();
         table.add(quitButton).center().width(200).height(50).pad(5);
         table.row();
-        table.add(aboutLabel).center().width(200).height(20).pad(5);
+        table.add(playerLabel).center().width(200).height(20).pad(5);
         table.row();
-        table.add(musicLabel).center().width(200).height(20).pad(5);
+        table.add(playerValue).center().width(200).height(20).pad(5);
+        table.row();
+        table.add(scoreLabel).center().width(200).height(20).pad(5);
+        table.row();
+        table.add(scoreValue).center().width(200).height(20).pad(5);
 
         Gdx.input.setInputProcessor(stage);
     }

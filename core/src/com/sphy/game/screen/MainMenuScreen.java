@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -19,11 +20,21 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.sphy.game.manager.PreferencesManager;
+import com.sphy.game.manager.ResourceManager;
 
 public class MainMenuScreen implements Screen {
 
     private Stage stage;
-    Sound initSound;
+    private TextField playerName;
+    private String playerNameText;
+
+    public String getPlayerNameText() {
+        return playerNameText;
+    }
+
+    public void setPlayerNameText(String playerNameText) {
+        this.playerNameText = playerNameText;
+    }
 
     @Override
     public void show() {
@@ -35,9 +46,9 @@ public class MainMenuScreen implements Screen {
         VisTable table = new VisTable(true);
         table.setFillParent(true);
         stage.addActor(table);
-        initSound = Gdx.audio.newSound(Gdx.files.internal("sounds/popdance.mp3"));
+
         if (PreferencesManager.isSoundEnable()){
-            initSound.play();
+            ResourceManager.getMp3Sound("popdance").play();
         }
 
         VisTextButton playButton = new VisTextButton("PLAY");
@@ -46,8 +57,27 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 // Ir a jugar
                 dispose();
-                initSound.stop();
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+                ResourceManager.getMp3Sound("popdance").stop();
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(playerNameText));
+            }
+        });
+
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        BitmapFont font = new BitmapFont();
+        textFieldStyle.font = font;
+        textFieldStyle.fontColor = Color.WHITE;
+        playerName = new TextField("", textFieldStyle);
+        playerName.setMessageText("Enter your name");
+        playerName.setColor(Color.WHITE);
+
+        playerName.addListener(new InputListener() {
+            public boolean keyTyped(InputEvent event, char character) {
+                if (character == '\r' || character == '\n') { // Enter
+                    playerNameText = playerName.getText();
+                    System.out.println(playerNameText);
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -57,7 +87,7 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 // Ir a la pantalla de configuración
                 dispose();
-                initSound.stop();
+                ResourceManager.getMp3Sound("popdance").stop();
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new PreferenceScreen());
             }
         });
@@ -76,21 +106,13 @@ public class MainMenuScreen implements Screen {
         VisLabel musicLabel = new VisLabel("Music I Use: Bensound.com/royalty-free-music\n" +
                 "License code: BFZ3QBQDHC9HCJ9A");
 
-        // Añade filas a la tabla y añade los componentes
-        /*VisLabel nameLabel = new VisLabel("Type your name");
-        BitmapFont font = new BitmapFont(Gdx.files.internal("default.fnt"));
-        TextField.TextFieldStyle style = new TextField.TextFieldStyle();
-        style.fontColor = Color.BLACK;
-        style.font = font;
-        TextField playerNameField = new TextField("",style);
-        table.row();
-        table.add(nameLabel);
-        table.row();
-        table.add(playerNameField);*/
+
 
 
         table.row();
         table.add(playButton).center().width(200).height(100).pad(5);
+        table.row();
+        table.add(playerName).width(200).height(50);
         table.row();
         table.add(configButton).center().width(200).height(50).pad(5);
         table.row();

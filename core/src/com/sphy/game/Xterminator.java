@@ -9,13 +9,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.sphy.game.domain.Player;
 import com.sphy.game.screen.MainMenuScreen;
+import com.sphy.game.screen.SplashScreen;
 
 public class Xterminator extends Game {
 
 
 	@Override
 	public void create () {
-		((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
+		((Game) Gdx.app.getApplicationListener()).setScreen(new SplashScreen());
 	}
 
 	@Override

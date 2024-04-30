@@ -22,6 +22,7 @@ import com.sphy.game.domain.Player;
 import com.sphy.game.items.Goal;
 import com.sphy.game.items.Stone;
 import com.sphy.game.manager.PreferencesManager;
+import com.sphy.game.manager.ResourceManager;
 import com.sphy.game.screen.GameOverMenuScreen;
 import com.sphy.game.screen.GameScreen;
 import com.sphy.game.screen.GameScreen2;
@@ -33,40 +34,38 @@ public class SpriteManager2 implements Disposable {
 
 
     Player player;
-    Bullet bullet2;
-    Sound gunSound;
-    Sound hitSound;
-    Sound boomSound;
-    Sound jumpSound;
-    Sound gameOverSound;
+    int playerDirection;
+    int score;
+
+
     Array<Enemy> enemiesR2;
     Array<Enemy> enemiesL2;
-
-
-
     FinalEnemy enemyTiled;
-
-    Array<Stone> stones;
+    float enemyYdown = 125;
+    float enemyYup = 385;
     float lastEnemyR2;
     float lastEnemyL2;
+
+
+    Array<Stone> stones;
+
+
+    Bullet bullet2;
     Array<Bullet> bulletsR2;
     Array<Bullet> bulletsL2;
+    long lastBulletTime;
+    float randomDelayR = random(2f, 4f) * 1000000000;
+    float randomDelayL = random(2f, 4f) * 1000000000;
+
     boolean pause;
     boolean noMoveRigth;
     boolean noMoveLeft;
     boolean isOnGround;
-    long lastBulletTime;
-    int playerDirection;
-    float randomDelayR = random(2f, 4f) * 1000000000;
-    float randomDelayL = random(2f, 4f) * 1000000000;
-    int score;
-    float speed = 2;
-    float enemyYdown = 125;
-    float enemyYup = 385;
+
 
     private LevelManager2 levelManager2;
     CameraManager2 cameraManager2;
-    private Goal goal;
+
 
 
     public SpriteManager2(Player player){
@@ -78,41 +77,35 @@ public class SpriteManager2 implements Disposable {
         this.cameraManager2 = cameraManager;
     }
 
-    public void setGoal(Goal goal) {
-        this.goal = goal;
-    }
+
 
     public void setEnemyTiled(FinalEnemy enemyTiled) {
         this.enemyTiled = enemyTiled;
     }
 
-    public void initialize(){
-        player.position.x= 100;
-        player.rect.x=100;
-        player.position.y= 32;
-        player.rect.y= 32;
-        score= player.getScore();
-        boomSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
-        gunSound = Gdx.audio.newSound(Gdx.files.internal("sounds/gun.wav"));
-        hitSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hurt.mp3"));
-        jumpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/jump.wav"));
-        gameOverSound = Gdx.audio.newSound(Gdx.files.internal("sounds/gameover.wav"));
+    public void initialize() {
+        player.position.x = 100;
+        player.rect.x = 100;
+        player.position.y = 32;
+        player.rect.y = 32;
+        score = player.getScore();
+
         enemiesR2 = new Array<>();
         enemiesL2 = new Array<>();
-
-
-        stones = new Array<>();
-        bulletsR2 = new Array<>();
-        bulletsL2 = new Array<>();
         lastEnemyR2 = TimeUtils.nanoTime();
         lastEnemyL2 = TimeUtils.nanoTime();
+
+        stones = new Array<>();
+
+        lastBulletTime = TimeUtils.nanoTime();
+        bulletsR2 = new Array<>();
+        bulletsL2 = new Array<>();
+
         pause = false;
         noMoveRigth = false;
         noMoveLeft = false;
         isOnGround = player.position.y == 32;
-        lastBulletTime = TimeUtils.nanoTime();
-        if (PreferencesManager.isSoundEnable())
-            boomSound.play();
+
     }
 
 
@@ -216,7 +209,7 @@ public class SpriteManager2 implements Disposable {
                 }
                 enemiesR2.removeValue(enemy, true);
                 if (PreferencesManager.isSoundEnable())
-                    hitSound.play();
+                    ResourceManager.getMp3Sound("hurt").play();
             }
             //colision de un enemigo que viene por la derecha con la bala
             for (Bullet bullet : bulletsR2) {
@@ -225,7 +218,7 @@ public class SpriteManager2 implements Disposable {
                     enemiesR2.removeValue(enemy, true);
                     bulletsR2.removeValue(bullet, true);
                     if (PreferencesManager.isSoundEnable())
-                        boomSound.play();
+                        ResourceManager.getWavSound("explosion").play();
                 }
             }
         }
@@ -237,7 +230,7 @@ public class SpriteManager2 implements Disposable {
                 if (player.lives == 0) {
                     pause = true;
                     if (PreferencesManager.isSoundEnable())
-                        gameOverSound.play();
+                        ResourceManager.getWavSound("gameover").play();
 
                     GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
                     gameOverScreen.setScore(score);
@@ -256,7 +249,7 @@ public class SpriteManager2 implements Disposable {
                 }
                 enemiesL2.removeValue(enemy, true);
                 if (PreferencesManager.isSoundEnable())
-                    hitSound.play();
+                    ResourceManager.getMp3Sound("hurt").play();
             }
             //colision de un enemigo que viene por la izquierda con la bala
             for (Bullet bullet : bulletsL2) {
@@ -265,7 +258,7 @@ public class SpriteManager2 implements Disposable {
                     enemiesL2.removeValue(enemy, true);
                     bulletsL2.removeValue(bullet, true);
                     if (PreferencesManager.isSoundEnable())
-                        boomSound.play();
+                        ResourceManager.getWavSound("explosion").play();
                 }
             }
         }
@@ -282,7 +275,7 @@ public class SpriteManager2 implements Disposable {
             }
 
             if (PreferencesManager.isSoundEnable())
-                hitSound.play();
+                ResourceManager.getMp3Sound("hurt").play();
         }
 
         for (Bullet bullet : bulletsR2) {
@@ -297,7 +290,7 @@ public class SpriteManager2 implements Disposable {
                     ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
                 }
                 if (PreferencesManager.isSoundEnable())
-                    boomSound.play();
+                    ResourceManager.getWavSound("explosion").play();
             }
         }
 
@@ -361,13 +354,13 @@ public class SpriteManager2 implements Disposable {
             if (player.position.y == 32) {
                 player.move(0,300);
                 if (PreferencesManager.isSoundEnable())
-                    jumpSound.play();
+                    ResourceManager.getWavSound("jump").play();
 
             }
             if (player.position.y == 192) {
                 player.move(0,150);
                 if (PreferencesManager.isSoundEnable())
-                    jumpSound.play();
+                    ResourceManager.getWavSound("jump").play();
             }
         }
         // caer poco a poco
@@ -381,7 +374,7 @@ public class SpriteManager2 implements Disposable {
             if (currentTime - lastBulletTime > 300000000) { // 0.3 segundos en nanosegundos
                 spawnBullet();
                 if (PreferencesManager.isSoundEnable())
-                    gunSound.play();
+                    ResourceManager.getWavSound("gun").play();
 
                 lastBulletTime = currentTime;
             }
