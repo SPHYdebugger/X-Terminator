@@ -1,4 +1,4 @@
-package com.sphy.game.manager;
+package com.sphy.game.manager2;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -12,23 +12,24 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.sphy.game.domain.Bullet;
 import com.sphy.game.domain.Enemy;
+import com.sphy.game.domain.FinalEnemy;
+import com.sphy.game.domain.Player;
 
-public class RenderManager implements Disposable {
+public class RenderManager2 implements Disposable {
 
     Batch batch;
     BitmapFont font;
     Texture backgroundTexture;
 
-    private SpriteManager spriteManager;
-    CameraManager cameraManager;
-    String playerNameText = ".";
+    private SpriteManager2 spriteManager2;
+    CameraManager2 cameraManager2;
+    Player player;
 
-
-    public RenderManager(SpriteManager spriteManager, CameraManager cameraManager, Batch batch, String playerNameText){
-        this.spriteManager = spriteManager;
-        this.cameraManager = cameraManager;
+    public RenderManager2(SpriteManager2 spriteManager2, CameraManager2 cameraManager2, Batch batch, Player player){
+        this.spriteManager2 = spriteManager2;
+        this.cameraManager2 = cameraManager2;
         this.batch = batch;
-        this.playerNameText = playerNameText;
+        this.player = player;
         initialize();
     }
 
@@ -50,40 +51,40 @@ public class RenderManager implements Disposable {
 
         batch.end();
 
-        spriteManager.manageInput();
-        spriteManager.handleCollisions();
+        spriteManager2.manageInput();
+        spriteManager2.handleCollisions();
     }
 
     private void drawPlayer(){
-        spriteManager.player.draw(batch);
+        spriteManager2.player.draw(batch);
 
-        for (Bullet bullet : spriteManager.bulletsL) {
+        for (Bullet bullet : spriteManager2.bulletsL2) {
             bullet.draw(batch);
         }
-        for (Bullet bullet : spriteManager.bulletsR) {
+        for (Bullet bullet : spriteManager2.bulletsR2) {
             bullet.draw(batch);
         }
     }
 
     private void drawEnemies(){
-        for (Enemy enemy : spriteManager.enemiesR)
+        for (Enemy enemy : spriteManager2.enemiesR2)
             enemy.draw(batch);
-        for (Enemy enemy : spriteManager.enemiesL)
+        for (Enemy enemy : spriteManager2.enemiesL2)
             enemy.draw(batch);
     }
 
-    private void drawTiledEnemies(){
-        for (Enemy enemy : spriteManager.enemiesRTiled)
-            enemy.draw(batch);
-        for (Enemy enemy : spriteManager.enemiesLTiled)
-            enemy.draw(batch);
+    private void drawTiledEnemies() {
+
+        spriteManager2.enemyTiled.draw(batch);
     }
-    private void drawHud(){
-        font.draw(batch, " LIVES:  " + spriteManager.player.lives, cameraManager.camera.position.x - 500 , cameraManager.camera.position.y + 200);
-        font.draw(batch, " SCORE:  " + spriteManager.score, cameraManager.camera.position.x - 300 , cameraManager.camera.position.y + 200);
+
+    public void drawHud(){
+        font.draw(batch, " LIVES:  " + spriteManager2.player.lives, cameraManager2.camera.position.x - 500 , cameraManager2.camera.position.y + 200);
+        font.draw(batch, " SCORE:  " + spriteManager2.score, cameraManager2.camera.position.x - 300 , cameraManager2.camera.position.y + 200);
         //font.draw(batch, "LIVES: " + spriteManager.player.lives, 20, Gdx.graphics.getHeight() - 20);
         //font.draw(batch, "SCORE: " + spriteManager.score, 20, Gdx.graphics.getHeight() - 50);
-        font.draw(batch, " PLAYER:  " + playerNameText, cameraManager.camera.position.x - 100 , cameraManager.camera.position.y + 200);
+        font.draw(batch, " Enemy DAMAGE:  " + spriteManager2.enemyTiled.damage, cameraManager2.camera.position.x - 500 , cameraManager2.camera.position.y + 170);
+        font.draw(batch, " PLAYER:  " + player.getName(), cameraManager2.camera.position.x - 100 , cameraManager2.camera.position.y + 200);
 
     }
 

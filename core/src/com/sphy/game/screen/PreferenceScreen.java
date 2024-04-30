@@ -39,7 +39,7 @@ public class PreferenceScreen implements Screen {
 
         VisLabel difficultyLabel = new VisLabel("-- DIFFICULTY --");
 
-        String[] resolutionsArray = {"LOW", "MEDIUM", "HIGH"};
+        String[] resolutionsArray = {"LOW", "HIGH"};
         final VisList difficultyList = new VisList();
         difficultyList.setItems(resolutionsArray);
         difficultyList.setSelected(PreferencesManager.getDifficulty());
@@ -51,9 +51,6 @@ public class PreferenceScreen implements Screen {
                         PreferencesManager.setDifficulty("LOW");
                         break;
                     case 1:
-                        PreferencesManager.setDifficulty("MEDIUM");
-                        break;
-                    case 2:
                         PreferencesManager.setDifficulty("HIGH");
                         break;
                     default:
@@ -87,8 +84,6 @@ public class PreferenceScreen implements Screen {
     }
 
     private void loadPreferences() {
-
-
         if (!PreferencesManager.existSound())
             PreferencesManager.enableSound();
     }
@@ -103,7 +98,6 @@ public class PreferenceScreen implements Screen {
     public void render(float dt) {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         stage.act(dt);
         stage.draw();
     }
@@ -114,16 +108,13 @@ public class PreferenceScreen implements Screen {
     }
 
     @Override
-    public void hide() {
-    }
+    public void hide() {}
 
     @Override
-    public void pause() {
-    }
+    public void pause() {}
 
     @Override
     public void resize(int width, int height) {
-        //stage.setViewport(width, height);
     }
 
     @Override
