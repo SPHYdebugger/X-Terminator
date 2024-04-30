@@ -25,6 +25,8 @@ public class Player implements Disposable {
 
     private int score;
     public int lives;
+    private String  name;
+
 
     public Player(Vector2 position, String animationName) {
         this.position = position;
@@ -35,6 +37,8 @@ public class Player implements Disposable {
         rect = new Rectangle(position.x + 10, position.y, currentFrame.getRegionWidth()-40, currentFrame.getRegionHeight());
         lives = 3;
     }
+
+
 
     public void draw(Batch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
@@ -67,6 +71,14 @@ public class Player implements Disposable {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

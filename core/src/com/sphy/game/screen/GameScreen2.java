@@ -54,7 +54,7 @@ public class GameScreen2 implements Screen {
         levelManager2.setCameraManager(cameraManager2);
         levelManager2.loadCurrentLevel2();
 
-        renderManager2 = new RenderManager2(spriteManager2, cameraManager2, levelManager2.batch);
+        renderManager2 = new RenderManager2(spriteManager2, cameraManager2, levelManager2.batch,player);
     }
 
 
@@ -65,7 +65,7 @@ public class GameScreen2 implements Screen {
         spriteManager2.update(dt);
 
         renderManager2.draw();
-        renderManager2 = new RenderManager2(spriteManager2,cameraManager2, levelManager2.batch);
+        renderManager2 = new RenderManager2(spriteManager2,cameraManager2, levelManager2.batch, player);
 
     }
 

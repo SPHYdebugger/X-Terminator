@@ -30,8 +30,8 @@ public class SpriteManager implements Disposable {
 
     Player player;
     int playerDirection;
-    String playerNameText;
-    int score =0;
+    static String playerNameText = "";
+    static int score =0;
 
 
 
@@ -230,9 +230,7 @@ public class SpriteManager implements Disposable {
                 player.lives--;
                 if (player.lives == 0) {
                     pause = true;
-                    GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
-                    gameOverScreen.setScore(score);
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
+                    gameOver();
                 }
                 enemiesR.removeValue(enemy, true);
                 if (PreferencesManager.isSoundEnable())
@@ -268,16 +266,7 @@ public class SpriteManager implements Disposable {
                     if (PreferencesManager.isSoundEnable()){
                         ResourceManager.getWavSound("gameover").play();
                     }
-                    GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
-                    gameOverScreen.setScore(score);
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-
-                            ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
-                            gameOverScreen.setScore(score);
-                        }
-                    }, 2);
+                    gameOver();
                 }
                 enemiesL.removeValue(enemy, true);
                 if (PreferencesManager.isSoundEnable())
@@ -310,9 +299,7 @@ public class SpriteManager implements Disposable {
                 player.lives--;
                 if (player.lives == 0) {
                     pause = true;
-                    GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
-                    gameOverScreen.setScore(score);
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
+                    gameOver();
                 }
                 enemiesRTiled.removeValue(enemy, true);
                 if (PreferencesManager.isSoundEnable())
@@ -348,17 +335,7 @@ public class SpriteManager implements Disposable {
                     if (PreferencesManager.isSoundEnable()){
                         ResourceManager.getWavSound("gameover").play();
                     }
-                    GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
-                    gameOverScreen.setPlayerNameText(playerNameText);
-                    gameOverScreen.setScore(score);
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-
-                            ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
-                            gameOverScreen.setScore(score);
-                        }
-                    }, 2);
+                    gameOver();
                 }
                 enemiesLTiled.removeValue(enemy, true);
                 if (PreferencesManager.isSoundEnable())
@@ -403,6 +380,7 @@ public class SpriteManager implements Disposable {
         //colisión con la meta
         Rectangle goalRect = new Rectangle(goal.getX(),goal.getY(), goal.getWidth(), goal.getHeigth());
         if (player.rect.overlaps(goalRect)){
+            player.setName(playerNameText);
             player.setScore(score);
             pause= true;
             showVictoryMessage();
@@ -447,7 +425,9 @@ public class SpriteManager implements Disposable {
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             if (player.position.y == 32) {
                 player.move(0,300);
-                ResourceManager.getWavSound("jump").play();
+                if (PreferencesManager.isSoundEnable()){
+                    ResourceManager.getWavSound("jump").play();
+                }
             }
         }
         // caer poco a poco
@@ -510,7 +490,17 @@ public class SpriteManager implements Disposable {
 
 
     }
-
+    public static void gameOver(){
+        GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
+        gameOverScreen.setPlayerNameText(playerNameText);
+        gameOverScreen.setScore(score);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
+            }
+        }, 2);
+    }
 
 
 }

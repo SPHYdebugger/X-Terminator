@@ -15,6 +15,9 @@ import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.sphy.game.manager.ScoreManager;
+
+import java.time.LocalDate;
 
 public class GameOverMenuScreen implements Screen {
 
@@ -23,7 +26,7 @@ public class GameOverMenuScreen implements Screen {
     Preferences prefs;
     Texture gameOver;
     int score;
-    String playerNameText;
+    String playerNameText ="";
 
     public void setScore(int score) {
         this.score = score;
@@ -80,7 +83,7 @@ public class GameOverMenuScreen implements Screen {
                 // Ir a la pantalla de configuración
                 dispose();
                 initSound.stop();
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new PreferenceScreen());
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new ScoresScreen());
             }
         });
 
@@ -118,6 +121,8 @@ public class GameOverMenuScreen implements Screen {
         table.add(scoreValue).center().width(200).height(20).pad(5);
 
         Gdx.input.setInputProcessor(stage);
+        ScoreManager.Score playerScore = new ScoreManager.Score(playerNameText,score, LocalDate.now());
+        ScoreManager.saveScore(playerScore);
     }
 
     @Override

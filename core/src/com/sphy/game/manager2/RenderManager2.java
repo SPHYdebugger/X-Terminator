@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.sphy.game.domain.Bullet;
 import com.sphy.game.domain.Enemy;
 import com.sphy.game.domain.FinalEnemy;
+import com.sphy.game.domain.Player;
 
 public class RenderManager2 implements Disposable {
 
@@ -22,11 +23,13 @@ public class RenderManager2 implements Disposable {
 
     private SpriteManager2 spriteManager2;
     CameraManager2 cameraManager2;
+    Player player;
 
-    public RenderManager2(SpriteManager2 spriteManager2, CameraManager2 cameraManager2, Batch batch){
+    public RenderManager2(SpriteManager2 spriteManager2, CameraManager2 cameraManager2, Batch batch, Player player){
         this.spriteManager2 = spriteManager2;
         this.cameraManager2 = cameraManager2;
         this.batch = batch;
+        this.player = player;
         initialize();
     }
 
@@ -80,7 +83,9 @@ public class RenderManager2 implements Disposable {
         font.draw(batch, " SCORE:  " + spriteManager2.score, cameraManager2.camera.position.x - 300 , cameraManager2.camera.position.y + 200);
         //font.draw(batch, "LIVES: " + spriteManager.player.lives, 20, Gdx.graphics.getHeight() - 20);
         //font.draw(batch, "SCORE: " + spriteManager.score, 20, Gdx.graphics.getHeight() - 50);
-        font.draw(batch, " Enemy DAMAGE:  " + spriteManager2.enemyTiled.damage, cameraManager2.camera.position.x - 500 , cameraManager2.camera.position.y + 180);
+        font.draw(batch, " Enemy DAMAGE:  " + spriteManager2.enemyTiled.damage, cameraManager2.camera.position.x - 500 , cameraManager2.camera.position.y + 170);
+        font.draw(batch, " PLAYER:  " + player.getName(), cameraManager2.camera.position.x - 100 , cameraManager2.camera.position.y + 200);
+
     }
 
 

@@ -21,7 +21,7 @@ public class RenderManager implements Disposable {
 
     private SpriteManager spriteManager;
     CameraManager cameraManager;
-    String playerNameText;
+    String playerNameText = ".";
 
 
     public RenderManager(SpriteManager spriteManager, CameraManager cameraManager, Batch batch, String playerNameText){
@@ -83,9 +83,8 @@ public class RenderManager implements Disposable {
         font.draw(batch, " SCORE:  " + spriteManager.score, cameraManager.camera.position.x - 300 , cameraManager.camera.position.y + 200);
         //font.draw(batch, "LIVES: " + spriteManager.player.lives, 20, Gdx.graphics.getHeight() - 20);
         //font.draw(batch, "SCORE: " + spriteManager.score, 20, Gdx.graphics.getHeight() - 50);
-        if (!playerNameText.isEmpty()){
-            font.draw(batch, " PLAYER:  " + playerNameText, cameraManager.camera.position.x - 100 , cameraManager.camera.position.y + 200);
-        }
+        font.draw(batch, " PLAYER:  " + playerNameText, cameraManager.camera.position.x - 100 , cameraManager.camera.position.y + 200);
+
     }
 
 

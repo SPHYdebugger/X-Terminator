@@ -15,7 +15,7 @@ public class GameScreen implements Screen {
     RenderManager renderManager;
     LevelManager levelManager;
     CameraManager cameraManager;
-    String playerNameText;
+    String playerNameText = "Anonymous";
 
     Stage stage;
     private boolean paused = false;

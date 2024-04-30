@@ -1,6 +1,7 @@
 package com.sphy.game.manager;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,10 +14,12 @@ public class ScoreManager {
     public static class Score implements Serializable {
         private String name;
         private int score;
+        private LocalDate localDate;
 
-        public Score(String playerName, int score) {
+        public Score(String playerName, int score, LocalDate localDate) {
             this.name = playerName;
             this.score = score;
+            this.localDate = localDate;
         }
 
         public String getName() {
@@ -33,6 +36,14 @@ public class ScoreManager {
 
         public void setScore(int score) {
             this.score = score;
+        }
+
+        public LocalDate getLocalDate() {
+            return localDate;
+        }
+
+        public void setLocalDate(LocalDate localDate) {
+            this.localDate = localDate;
         }
     }
 

@@ -26,7 +26,7 @@ public class MainMenuScreen implements Screen {
 
     private Stage stage;
     private TextField playerName;
-    private String playerNameText;
+    private String playerNameText = "Anonymous";
 
     public String getPlayerNameText() {
         return playerNameText;

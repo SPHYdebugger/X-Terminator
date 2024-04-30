@@ -35,6 +35,7 @@ public class SpriteManager2 implements Disposable {
 
     Player player;
     int playerDirection;
+    String playerNameText;
     int score;
 
 
@@ -88,6 +89,7 @@ public class SpriteManager2 implements Disposable {
         player.rect.x = 100;
         player.position.y = 32;
         player.rect.y = 32;
+        playerNameText= player.getName();
         score = player.getScore();
 
         enemiesR2 = new Array<>();
@@ -270,6 +272,7 @@ public class SpriteManager2 implements Disposable {
             if (player.lives == 0) {
                 pause = true;
                 GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
+                gameOverScreen.setPlayerNameText(playerNameText);
                 gameOverScreen.setScore(score);
                 ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
             }
@@ -286,6 +289,7 @@ public class SpriteManager2 implements Disposable {
                 if (enemyTiled.damage == 0) {
                     pause = true;
                     GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
+                    gameOverScreen.setPlayerNameText(playerNameText);
                     gameOverScreen.setScore(score);
                     ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
                 }
@@ -304,16 +308,11 @@ public class SpriteManager2 implements Disposable {
 
             if (player.rect.overlaps(stoneRect) && player.position.y >= stone.getY()) {
                 player.position.y = 192;
-
                 player.rect.y = 192;
             }
 
         }
-        /*Rectangle goalRect = new Rectangle(goal.getX(),goal.getY(), goal.getWidth(), goal.getHeigth());
-        if (player.rect.overlaps(goalRect)){
-            pause= true;
-            showVictoryMessage();
-        }*/
+
 
 
 
