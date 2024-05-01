@@ -31,7 +31,7 @@ public class SpriteManager implements Disposable {
     Player player;
     int playerDirection;
     static String playerNameText = "";
-    static int score =0;
+    static int score;
 
 
 
@@ -101,7 +101,8 @@ public class SpriteManager implements Disposable {
     public void initialize() {
         player = new Player(new Vector2(100, 232), "sofiSoldado");
         isOnGround = player.position.y == 32;
-
+        player.setScore(0);
+        score= 0;
         enemiesR = new Array<>();
         enemiesL = new Array<>();
         enemiesRTiled = new Array<>();

@@ -7,10 +7,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -42,6 +44,16 @@ public class MainMenuScreen implements Screen {
             VisUI.load();
 
         stage = new Stage();
+
+        // Crear fondo
+        Texture backgroundTexture = new Texture(Gdx.files.internal("textures/Presentación1.png"));
+        Image backgroundImage = new Image(backgroundTexture);
+        backgroundImage.setFillParent(true);
+
+        VisTable table1 = new VisTable(true);
+        table1.setFillParent(true);
+        stage.addActor(backgroundImage);
+        stage.addActor(table1);
 
         VisTable table = new VisTable(true);
         table.setFillParent(true);

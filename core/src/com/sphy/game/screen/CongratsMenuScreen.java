@@ -15,11 +15,12 @@ import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.sphy.game.domain.Player;
 import com.sphy.game.manager.ScoreManager;
 
 import java.time.LocalDate;
 
-public class GameOverMenuScreen implements Screen {
+public class CongratsMenuScreen implements Screen {
 
     private Stage stage;
     Sound initSound;
@@ -62,16 +63,17 @@ public class GameOverMenuScreen implements Screen {
             initSound.play();
         }
 
-        VisImage image = new VisImage(new Texture(Gdx.files.internal("textures/Game-over.png")));
+        VisImage image = new VisImage(new Texture(Gdx.files.internal("textures/Congratulations.png")));
 
 
         VisTextButton playButton = new VisTextButton("PLAY AGAIN");
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                // Ir a jugar
                 dispose();
                 initSound.stop();
+
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(playerNameText));
             }
         });
@@ -80,7 +82,7 @@ public class GameOverMenuScreen implements Screen {
         configButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                // Ir a la pantalla de configuración
                 dispose();
                 initSound.stop();
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new ScoresScreen());
