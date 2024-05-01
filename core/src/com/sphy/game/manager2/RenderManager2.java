@@ -83,7 +83,7 @@ public class RenderManager2 implements Disposable {
         font.draw(batch, " SCORE:  " + spriteManager2.score, cameraManager2.camera.position.x - 300 , cameraManager2.camera.position.y + 200);
         //font.draw(batch, "LIVES: " + spriteManager.player.lives, 20, Gdx.graphics.getHeight() - 20);
         //font.draw(batch, "SCORE: " + spriteManager.score, 20, Gdx.graphics.getHeight() - 50);
-        font.draw(batch, " Enemy DAMAGE:  " + spriteManager2.enemyTiled.damage, cameraManager2.camera.position.x - 500 , cameraManager2.camera.position.y + 170);
+        font.draw(batch, " Enemy HEALTH:  " + spriteManager2.enemyTiled.damage + " %", cameraManager2.camera.position.x - 500 , cameraManager2.camera.position.y + 170);
         font.draw(batch, " PLAYER:  " + player.getName(), cameraManager2.camera.position.x - 100 , cameraManager2.camera.position.y + 200);
 
     }

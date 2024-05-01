@@ -23,10 +23,7 @@ import com.sphy.game.items.Goal;
 import com.sphy.game.items.Stone;
 import com.sphy.game.manager.PreferencesManager;
 import com.sphy.game.manager.ResourceManager;
-import com.sphy.game.screen.GameOverMenuScreen;
-import com.sphy.game.screen.GameScreen;
-import com.sphy.game.screen.GameScreen2;
-import com.sphy.game.screen.MainMenuScreen;
+import com.sphy.game.screen.*;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
@@ -205,9 +202,7 @@ public class SpriteManager2 implements Disposable {
                 player.lives--;
                 if (player.lives == 0) {
                     pause = true;
-                    GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
-                    gameOverScreen.setScore(score);
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
+                    gameOver();
                 }
                 enemiesR2.removeValue(enemy, true);
                 if (PreferencesManager.isSoundEnable())
@@ -233,21 +228,7 @@ public class SpriteManager2 implements Disposable {
                     pause = true;
                     if (PreferencesManager.isSoundEnable())
                         ResourceManager.getWavSound("gameover").play();
-
-                    GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
-                    gameOverScreen.setScore(score);
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-
-                            ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
-                            gameOverScreen.setScore(score);
-                        }
-                    }, 2);
-
-
-
-
+                    gameOver();
                 }
                 enemiesL2.removeValue(enemy, true);
                 if (PreferencesManager.isSoundEnable())
@@ -271,10 +252,7 @@ public class SpriteManager2 implements Disposable {
             player.lives--;
             if (player.lives == 0) {
                 pause = true;
-                GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
-                gameOverScreen.setPlayerNameText(playerNameText);
-                gameOverScreen.setScore(score);
-                ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
+                gameOver();
             }
 
             if (PreferencesManager.isSoundEnable())
@@ -284,14 +262,14 @@ public class SpriteManager2 implements Disposable {
         for (Bullet bullet : bulletsR2) {
             if (enemyTiled.rect.overlaps(bullet.rect)) {
                 score += 300;
-                enemyTiled.damage = enemyTiled.damage-100;
+                enemyTiled.damage = enemyTiled.damage-10;
                 bulletsR2.removeValue(bullet, true);
                 if (enemyTiled.damage == 0) {
                     pause = true;
-                    GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
-                    gameOverScreen.setPlayerNameText(playerNameText);
-                    gameOverScreen.setScore(score);
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
+                    CongratsMenuScreen congratsScreen = new CongratsMenuScreen();
+                    congratsScreen.setPlayerNameText(playerNameText);
+                    congratsScreen.setScore(score);
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(congratsScreen);
                 }
                 if (PreferencesManager.isSoundEnable())
                     ResourceManager.getWavSound("explosion").play();
@@ -402,24 +380,18 @@ public class SpriteManager2 implements Disposable {
         bullet2.dispose();
     }
 
-    private void showVictoryMessage() {
-
-        Label.LabelStyle style = new Label.LabelStyle();
-        style.font = new BitmapFont();
-
-        // Crea la etiqueta del mensaje
-        Label victoryLabel = new Label("¡Fase superada!", style);
-        victoryLabel.setPosition(Gdx.graphics.getWidth() / 2 - victoryLabel.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-
-        // Agrega la etiqueta al Stage
-
-
+    private void gameOver(){
+        GameOverMenuScreen gameOverScreen = new GameOverMenuScreen();
+        gameOverScreen.setPlayerNameText(playerNameText);
+        gameOverScreen.setScore(score);
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameOverMenuScreen());
+                ((Game) Gdx.app.getApplicationListener()).setScreen(gameOverScreen);
             }
-        }, 3);
+        }, 2);
     }
+
+
 
 }

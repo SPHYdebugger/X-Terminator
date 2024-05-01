@@ -19,9 +19,9 @@ public class FinalEnemy implements Disposable {
     private float stateTime;
     private TextureRegion currentFrame;
     public Rectangle rect;
-    private float angle; // Ángulo actual del movimiento circular
-    private float radius; // Radio del círculo
-    private float speed; // Velocidad angular
+    private float angle;
+    private float radius;
+    private float speed;
     public int damage;
 
     public FinalEnemy(Vector2 center, String animationName, float radius, float speed) {
@@ -34,7 +34,7 @@ public class FinalEnemy implements Disposable {
         currentFrame = animation.getKeyFrame(0);
 
         rect = new Rectangle(position.x, position.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
-        damage= 1000;
+        damage= 100;
 
     }
 
