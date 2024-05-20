@@ -10,10 +10,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.sphy.game.domain.Bullet;
-import com.sphy.game.domain.Enemy;
-import com.sphy.game.domain.FinalEnemy;
-import com.sphy.game.domain.Player;
+import com.sphy.game.domain.*;
 
 public class RenderManager2 implements Disposable {
 
@@ -48,7 +45,7 @@ public class RenderManager2 implements Disposable {
         drawPlayer();
         drawEnemies();
         drawTiledEnemies();
-
+        drawPowerUps();
         batch.end();
 
         spriteManager2.manageInput();
@@ -85,10 +82,16 @@ public class RenderManager2 implements Disposable {
         //font.draw(batch, "SCORE: " + spriteManager.score, 20, Gdx.graphics.getHeight() - 50);
         font.draw(batch, " Enemy HEALTH:  " + spriteManager2.enemyTiled.damage + " %", cameraManager2.camera.position.x - 500 , cameraManager2.camera.position.y + 170);
         font.draw(batch, " PLAYER:  " + player.getName(), cameraManager2.camera.position.x - 100 , cameraManager2.camera.position.y + 200);
+        font.draw(batch, " FINEL LEVEL", cameraManager2.camera.position.x + 100 , cameraManager2.camera.position.y + 200);
 
     }
 
+    private void drawPowerUps(){
+        for (PowerUp powerUp : spriteManager2.freezers)
+            powerUp.draw(batch);
 
+
+    }
 
     @Override
     public void dispose() {

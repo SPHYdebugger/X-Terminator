@@ -104,6 +104,17 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+        VisTextButton instructionsButton = new VisTextButton("INSTRUCTIONS");
+        instructionsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Ir a la pantalla de configuración
+                dispose();
+                ResourceManager.getMp3Sound("popdance").stop();
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new InstructionsScreen());
+            }
+        });
+
         VisTextButton quitButton = new VisTextButton("QUIT");
         quitButton.addListener(new ClickListener() {
             @Override
@@ -122,15 +133,17 @@ public class MainMenuScreen implements Screen {
 
 
         table.row();
-        table.add(playButton).center().width(200).height(100).pad(5);
+        table.add(playButton).center().width(200).height(75).pad(5);
         table.row();
         table.add(playerName).width(200).height(50);
         table.row();
-        table.add(configButton).center().width(200).height(50).pad(5);
+        table.add(configButton).center().width(200).height(40).pad(5);
         table.row();
-        table.add(quitButton).center().width(200).height(50).pad(5);
+        table.add(instructionsButton).center().width(200).height(50).pad(5);
         table.row();
-        table.add(aboutLabel).center().width(200).height(20).pad(5);
+        table.add(quitButton).center().width(200).height(40).pad(5);
+        table.row();
+        table.add(aboutLabel).center().width(200).height(40).pad(5);
         table.row();
         table.add().left().width(200).height(20).pad(90);
         table.row();

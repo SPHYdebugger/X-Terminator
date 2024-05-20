@@ -3,7 +3,6 @@ package com.sphy.game.manager;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
@@ -18,10 +17,10 @@ import com.badlogic.gdx.utils.Timer;
 import com.sphy.game.domain.Bullet;
 import com.sphy.game.domain.Enemy;
 import com.sphy.game.domain.Player;
+import com.sphy.game.domain.PowerUp;
 import com.sphy.game.items.Goal;
 import com.sphy.game.items.Stone;
 import com.sphy.game.screen.GameOverMenuScreen;
-import com.sphy.game.screen.GameScreen;
 import com.sphy.game.screen.GameScreen2;
 import com.sphy.game.screen.MainMenuScreen;
 
@@ -73,7 +72,13 @@ public class SpriteManager implements Disposable {
     private float elapsedTime = 0f;
     private boolean victoryMessageDisplayed = false;
 
+    private PowerUp invencibleStar;
+    Array<PowerUp> invencibles;
+    private boolean invencible;
 
+    private PowerUp machineGunStar;
+    Array<PowerUp> machinesGuns;
+    private boolean machineGun;
 
 
 
@@ -120,6 +125,16 @@ public class SpriteManager implements Disposable {
         pause = false;
         noMoveRigth = false;
         noMoveLeft = false;
+
+        invencibleStar = new PowerUp(new Vector2(20, 232), new Texture("textures/Estrella.png"));
+        invencibles = new Array<>();
+        invencibles.add(invencibleStar);
+        invencible = false;
+
+        machineGunStar = new PowerUp(new Vector2(2000, 232), new Texture("textures/Estrella.png"));
+        machinesGuns = new Array<>();
+        machinesGuns.add(machineGunStar);
+        machineGun = false;
     }
 
     public void spawnEnemyR() {
@@ -228,14 +243,16 @@ public class SpriteManager implements Disposable {
         for (Enemy enemy : enemiesR) {
             //colision de un enemigo que viene por la derecha con el jugador
             if (enemy.rect.overlaps(player.rect)) {
-                player.lives--;
-                if (player.lives == 0) {
-                    pause = true;
-                    gameOver();
+                if (!invencible) {
+                    player.lives--;
+                    if (player.lives == 0) {
+                        pause = true;
+                        gameOver();
+                    }
+                    if (PreferencesManager.isSoundEnable())
+                        ResourceManager.getMp3Sound("hurt").play();
                 }
                 enemiesR.removeValue(enemy, true);
-                if (PreferencesManager.isSoundEnable())
-                    ResourceManager.getMp3Sound("hurt").play();
             }
             //colision de un enemigo que viene por la derecha con la bala
             for (Bullet bullet : bulletsR) {
@@ -261,17 +278,19 @@ public class SpriteManager implements Disposable {
         //colision de un enemigo que viene por la izquierda con el jugador
         for (Enemy enemy : enemiesL) {
             if (enemy.rect.overlaps(player.rect)) {
-                player.lives--;
-                if (player.lives == 0) {
-                    pause = true;
-                    if (PreferencesManager.isSoundEnable()){
-                        ResourceManager.getWavSound("gameover").play();
+                    if (!invencible) {
+                        player.lives--;
+                        if (player.lives == 0) {
+                            pause = true;
+                            if (PreferencesManager.isSoundEnable()) {
+                                ResourceManager.getWavSound("gameover").play();
+                            }
+                            gameOver();
+                        }
+                        if (PreferencesManager.isSoundEnable())
+                            ResourceManager.getMp3Sound("hurt").play();
                     }
-                    gameOver();
-                }
                 enemiesL.removeValue(enemy, true);
-                if (PreferencesManager.isSoundEnable())
-                    ResourceManager.getMp3Sound("hurt").play();
             }
             //colision de un enemigo que viene por la izquierda con la bala
             for (Bullet bullet : bulletsL) {
@@ -297,14 +316,17 @@ public class SpriteManager implements Disposable {
         for (Enemy enemy : enemiesRTiled) {
             //colision de un enemigoTiled que viene por la derecha con el jugador
             if (enemy.rect.overlaps(player.rect)) {
-                player.lives--;
-                if (player.lives == 0) {
-                    pause = true;
-                    gameOver();
+                if (!invencible) {
+                    player.lives--;
+                    if (player.lives == 0) {
+                        pause = true;
+                        gameOver();
+                    }
+
+                    if (PreferencesManager.isSoundEnable())
+                        ResourceManager.getMp3Sound("hurt").play();
                 }
                 enemiesRTiled.removeValue(enemy, true);
-                if (PreferencesManager.isSoundEnable())
-                    ResourceManager.getMp3Sound("hurt").play();
             }
             //colision de un enemigoTiled que viene por la derecha con la bala
             for (Bullet bullet : bulletsR) {
@@ -330,17 +352,20 @@ public class SpriteManager implements Disposable {
         //colision de un enemigoTiled que viene por la izquierda con el jugador
         for (Enemy enemy : enemiesLTiled) {
             if (enemy.rect.overlaps(player.rect)) {
-                player.lives--;
-                if (player.lives == 0) {
-                    pause = true;
-                    if (PreferencesManager.isSoundEnable()){
-                        ResourceManager.getWavSound("gameover").play();
+                if(!invencible) {
+                    player.lives--;
+                    if (player.lives == 0) {
+                        pause = true;
+                        if (PreferencesManager.isSoundEnable()) {
+                            ResourceManager.getWavSound("gameover").play();
+                        }
+                        gameOver();
                     }
-                    gameOver();
+
+                    if (PreferencesManager.isSoundEnable())
+                        ResourceManager.getMp3Sound("hurt").play();
                 }
                 enemiesLTiled.removeValue(enemy, true);
-                if (PreferencesManager.isSoundEnable())
-                    ResourceManager.getMp3Sound("hurt").play();
             }
             //colision de un enemigo que viene por la izquierda con la bala
             for (Bullet bullet : bulletsL) {
@@ -386,6 +411,41 @@ public class SpriteManager implements Disposable {
             pause= true;
             showVictoryMessage();
         }
+        //Colision con la estrella invencibilidad
+        for (PowerUp powerUp : invencibles) {
+            // Colisión del jugador con el power-up
+            if (powerUp.rect.overlaps(player.rect)) {
+                // Activar la invencibilidad
+                invencible = true;
+                invencibles.removeValue(powerUp, true);
+                //temporizador
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        invencible = false;
+                    }
+                }, 5);
+            }
+        }
+
+        //Colision con la estrella machinegun
+        for (PowerUp powerUp : machinesGuns) {
+            // Colisión del jugador con el power-up
+            if (powerUp.rect.overlaps(player.rect)) {
+                // Activar la invencibilidad
+                machineGun = true;
+                machinesGuns.removeValue(powerUp, true);
+                //temporizador
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        machineGun = false;
+                    }
+                }, 5);
+            }
+        }
+
+
     }
 
     public void update(float dt){
@@ -439,7 +499,13 @@ public class SpriteManager implements Disposable {
         //Disparar
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             long currentTime = TimeUtils.nanoTime();
-            if (currentTime - lastBulletTime > 300000000) { // 0.3 segundos en nanosegundos
+            int timeNextBullet;
+            if (machineGun){
+                timeNextBullet = 100000000;
+            }else {
+                timeNextBullet = 300000000;
+            }
+            if (currentTime - lastBulletTime > timeNextBullet) { // 0.3 segundos en nanosegundos
                 spawnBullet();
                 if (PreferencesManager.isSoundEnable()){
                     ResourceManager.getWavSound("gun").play();
