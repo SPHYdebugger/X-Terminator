@@ -1,17 +1,13 @@
 package com.sphy.game.manager;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.sphy.game.domain.Bullet;
 import com.sphy.game.domain.Enemy;
+import com.sphy.game.domain.PowerUp;
 
 public class RenderManager implements Disposable {
 
@@ -36,17 +32,18 @@ public class RenderManager implements Disposable {
 
         font = new BitmapFont();
         font.setColor(Color.WHITE);
-        //backgroundTexture = new Texture(Gdx.files.internal("textures/background.png"));
+
     }
 
     public void draw(){
 
         batch.begin();
-        //batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         drawHud();
         drawPlayer();
         drawEnemies();
         drawTiledEnemies();
+        drawPowerUps();
 
         batch.end();
 
@@ -81,13 +78,21 @@ public class RenderManager implements Disposable {
     private void drawHud(){
         font.draw(batch, " LIVES:  " + spriteManager.player.lives, cameraManager.camera.position.x - 500 , cameraManager.camera.position.y + 200);
         font.draw(batch, " SCORE:  " + spriteManager.score, cameraManager.camera.position.x - 300 , cameraManager.camera.position.y + 200);
+
         //font.draw(batch, "LIVES: " + spriteManager.player.lives, 20, Gdx.graphics.getHeight() - 20);
         //font.draw(batch, "SCORE: " + spriteManager.score, 20, Gdx.graphics.getHeight() - 50);
         font.draw(batch, " PLAYER:  " + playerNameText, cameraManager.camera.position.x - 100 , cameraManager.camera.position.y + 200);
+        font.draw(batch, " LEVEL 1", cameraManager.camera.position.x + 100 , cameraManager.camera.position.y + 200);
 
     }
 
+    private void drawPowerUps(){
+        for (PowerUp powerUp : spriteManager.invencibles)
+            powerUp.draw(batch);
+        for (PowerUp powerUp : spriteManager.machinesGuns)
+            powerUp.draw(batch);
 
+    }
 
     @Override
     public void dispose() {

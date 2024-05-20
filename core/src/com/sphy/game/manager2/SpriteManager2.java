@@ -3,27 +3,21 @@ package com.sphy.game.manager2;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
-import com.sphy.game.domain.Bullet;
-import com.sphy.game.domain.Enemy;
-import com.sphy.game.domain.FinalEnemy;
-import com.sphy.game.domain.Player;
-import com.sphy.game.items.Goal;
+import com.sphy.game.domain.*;
 import com.sphy.game.items.Stone;
 import com.sphy.game.manager.PreferencesManager;
 import com.sphy.game.manager.ResourceManager;
-import com.sphy.game.screen.*;
+import com.sphy.game.screen.CongratsMenuScreen;
+import com.sphy.game.screen.GameOverMenuScreen;
+import com.sphy.game.screen.MainMenuScreen;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
@@ -64,7 +58,9 @@ public class SpriteManager2 implements Disposable {
     private LevelManager2 levelManager2;
     CameraManager2 cameraManager2;
 
-
+    private PowerUp freezerStar;
+    Array<PowerUp> freezers;
+    private boolean freezer;
 
     public SpriteManager2(Player player){
         this.player = player;
@@ -105,6 +101,10 @@ public class SpriteManager2 implements Disposable {
         noMoveLeft = false;
         isOnGround = player.position.y == 32;
 
+        freezerStar = new PowerUp(new Vector2(100, 300), new Texture("textures/Estrella.png"));
+        freezers = new Array<>();
+        freezers.add(freezerStar);
+        freezer = false;
     }
 
 
@@ -259,6 +259,7 @@ public class SpriteManager2 implements Disposable {
                 ResourceManager.getMp3Sound("hurt").play();
         }
 
+        // Colision con enemigo final
         for (Bullet bullet : bulletsR2) {
             if (enemyTiled.rect.overlaps(bullet.rect)) {
                 score += 300;
@@ -276,11 +277,6 @@ public class SpriteManager2 implements Disposable {
             }
         }
 
-
-
-
-
-
         for (Stone stone : stones){
             Rectangle stoneRect = new Rectangle(stone.getX(), stone.getY(), stone.getWidth(), stone.getHeigth());
 
@@ -292,7 +288,22 @@ public class SpriteManager2 implements Disposable {
         }
 
 
-
+        //Colision con la estrella machinegun
+        for (PowerUp powerUp : freezers) {
+            // Colisión del jugador con el power-up
+            if (powerUp.rect.overlaps(player.rect)) {
+                // Activar el congelado
+                pause = true;
+                freezers.removeValue(powerUp, true);
+                //temporizador
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        pause = false;
+                    }
+                }, 5);
+            }
+        }
 
 
     }
