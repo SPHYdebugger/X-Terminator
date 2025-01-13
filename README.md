@@ -4,7 +4,7 @@
 
 ![image](https://github.com/SPHYdebugger/X-Terminator/blob/master/resources/menu.jpg)
 ![image](https://github.com/SPHYdebugger/X-Terminator/blob/master/resources/juego.jpg)
-![image](https://github.com/SPHYdebugger/X-Terminator/blob/master/resources/juego1.jpg)
+![image](https://github.com/SPHYdebugger/X-Terminator/blob/master/resources/juego2.jpg)
 <p> Teclas de juego </p>
 LEFT = MOVE LEFT
 RIGTH = MOVE RIGTH
