@@ -2,9 +2,9 @@
 
 ### X-Terminator: Juego JAVA con librería LibGDX
 
-![image](https://github.com/SPHYdebugger/X-Terminator/tree/master/resources/menu.jpg)
-![image](https://github.com/SPHYdebugger/X-Terminator/tree/master/resources/juego1.jpg)
-![image](https://github.com/SPHYdebugger/X-Terminator/tree/master/resources/juego.jpg)
+![image](https://github.com/SPHYdebugger/X-Terminator/blob/master/resources/menu.jpg)
+![image](https://github.com/SPHYdebugger/X-Terminator/blob/master/resources/juego.jpg)
+![image](https://github.com/SPHYdebugger/X-Terminator/blob/master/resources/juego1.jpg)
 <p> Teclas de juego </p>
 LEFT = MOVE LEFT
 RIGTH = MOVE RIGTH
